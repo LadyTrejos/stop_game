@@ -5,6 +5,7 @@ import logo from "./logo.svg";
 
 import "./App.scss";
 
+
 const GET_POST = sql`
 subscription GetStop {
   stop(where: {game_id: {_eq: 1}, player_id: {_neq: 2}}) {
@@ -18,7 +19,6 @@ subscription GetStop {
     pais
   }
 }
-
 `;
 
 function App() {
@@ -27,25 +27,18 @@ function App() {
   if (loading) {
     console.log("cargando");
   } else {
-    console.log("data: ", data);
+    console.log("data: ", data)}
+
+  function newGame() {
+    console.log("nueva partida");
   }
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="stop-title">Stop!</div>
+      <div className="new-game">
+        <button onClick={() => newGame()}>Nueva partida</button>
+      </div>
     </div>
   );
 }
