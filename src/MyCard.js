@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSubscription, useMutation, useQuery } from "@apollo/react-hooks";
+import { useSubscription } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import useStopForm from "./lib/CustomHooks";
 
@@ -23,17 +23,28 @@ const GET_POST = gql`
 export default function MyCard({ currentPlayer, game }) {
   const [gameID, setGameID] = useState(null);
   const [playerID, setPlayerID] = useState(null);
+  const [formError, setFormError] = useState(null);
+  const [disabled, setDisabled] = useState(false);
 
-  const { inputs, handleInputChange, handleSubmit } = useStopForm({
-    nombre: "",
-    apellido: "",
-    ciudad: "",
-    pais: "",
-    animal: "",
-    fruta: "",
-    color: "",
-    cosa: ""
-  });
+  function disableButton() {
+    setDisabled(true);
+  }
+
+  const { inputs, handleInputChange, handleSubmit } = useStopForm(
+    {
+      nombre: "",
+      apellido: "",
+      ciudad: "",
+      pais: "",
+      animal: "",
+      fruta: "",
+      color: "",
+      cosa: "",
+      game_id: game,
+      player_id: currentPlayer
+    },
+    ({ err }) => setFormError(err)
+  );
 
   const { loading, error, data } = useSubscription(GET_POST, {
     variables: { game_id: gameID, player_id: playerID }
@@ -45,10 +56,19 @@ export default function MyCard({ currentPlayer, game }) {
     console.log("data: ", data);
   }
 
+  function onChange(e) {
+    handleInputChange(e);
+    setFormError(null);
+  }
+
   return (
     <React.Fragment>
-      <form className="table" onSubmit={e => handleSubmit(e, inputs)}>
+      <form
+        className="table"
+        onSubmit={e => handleSubmit(e, inputs, disableButton)}
+      >
         <div className="card">
+          <div>{formError}</div>
           <div className="row">
             <label className="cell">Nombre</label>
             <label className="cell">Apellido</label>
@@ -60,7 +80,7 @@ export default function MyCard({ currentPlayer, game }) {
               <input
                 name="nombre"
                 type="text"
-                onChange={handleInputChange}
+                onChange={e => onChange(e)}
                 value={inputs.nombre}
               />
             </div>
@@ -68,7 +88,7 @@ export default function MyCard({ currentPlayer, game }) {
               <input
                 name="apellido"
                 type="text"
-                onChange={handleInputChange}
+                onChange={e => onChange(e)}
                 value={inputs.apellido}
               />
             </div>
@@ -76,7 +96,7 @@ export default function MyCard({ currentPlayer, game }) {
               <input
                 name="ciudad"
                 type="text"
-                onChange={handleInputChange}
+                onChange={e => onChange(e)}
                 value={inputs.ciudad}
               />
             </div>
@@ -84,7 +104,7 @@ export default function MyCard({ currentPlayer, game }) {
               <input
                 name="pais"
                 type="text"
-                onChange={handleInputChange}
+                onChange={e => onChange(e)}
                 value={inputs.pais}
               />
             </div>
@@ -101,7 +121,7 @@ export default function MyCard({ currentPlayer, game }) {
               <input
                 name="animal"
                 type="text"
-                onChange={handleInputChange}
+                onChange={e => onChange(e)}
                 value={inputs.animal}
               />
             </div>
@@ -109,7 +129,7 @@ export default function MyCard({ currentPlayer, game }) {
               <input
                 name="fruta"
                 type="text"
-                onChange={handleInputChange}
+                onChange={e => onChange(e)}
                 value={inputs.fruta}
               />
             </div>
@@ -117,7 +137,7 @@ export default function MyCard({ currentPlayer, game }) {
               <input
                 name="color"
                 type="text"
-                onChange={handleInputChange}
+                onChange={e => onChange(e)}
                 value={inputs.color}
               />
             </div>
@@ -125,7 +145,7 @@ export default function MyCard({ currentPlayer, game }) {
               <input
                 name="cosa"
                 type="text"
-                onChange={handleInputChange}
+                onChange={e => onChange(e)}
                 value={inputs.cosa}
               />
             </div>
@@ -134,7 +154,7 @@ export default function MyCard({ currentPlayer, game }) {
           <div className="hole hole-middle"></div>
           <div className="hole hole-bottom"></div>
         </div>
-        <button type="submit" className="stop-button">
+        <button type="submit" className="stop-button" disabled={disabled}>
           Stop
         </button>
       </form>

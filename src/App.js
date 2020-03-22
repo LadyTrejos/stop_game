@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSubscription, useMutation, useQuery } from "@apollo/react-hooks";
+import { useSubscription, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import MyCard from "./MyCard";
 import OpponentCard from "./OpponentCard";
@@ -52,9 +52,9 @@ function App() {
   }
 
   function newGame() {
-    InsertGame().then(res => {
-      setGameID(res.data.insert_games.returning[0].id);
-    });
+    // InsertGame().then(res => {
+    //   setGameID(res.data.insert_games.returning[0].id);
+    // });
 
     setActive(true);
     console.log("nueva partida: ");
@@ -63,7 +63,7 @@ function App() {
     <div>
       {active ? (
         <React.Fragment>
-          <MyCard currentPlayer={1} game={1} />
+          <MyCard currentPlayer={2} game={50} />
           <OpponentCard />
         </React.Fragment>
       ) : (
