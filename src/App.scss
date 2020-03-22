@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css?family=Kaushan+Script&display=swap');
+
+$font-handwritten: 'Kaushan Script',
+cursive;
+
+body {
+  background-color: #28DAD4;
+  text-align: center;
+}
+
+.stop-title {
+  font-family: $font-handwritten;
+  font-size: 5rem;
+  padding: 15vh 0;
+  color: white
+}
+
+.new-game {
+  button {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+  }
+}
