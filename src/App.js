@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSubscription, useMutation, useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import MyCard from "./MyCard";
+import OpponentCard from "./OpponentCard";
 import "./App.scss";
 
 const GET_POST = gql`
@@ -72,12 +73,20 @@ function App() {
   }
   let stops = null;
   return (
-    <div className="App">
-      <div className="stop-title">Stop!</div>
-      <button onClick={() => newGame()} className="new-game">
-        Nueva partida
-      </button>
-      <MyCard currentPlayer={1} game={1} />
+    <div>
+      {active ? (
+        <React.Fragment>
+          <MyCard currentPlayer={1} game={1} />
+          <OpponentCard />
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <div className="stop-title">Stop!</div>
+          <button onClick={() => newGame()} className="new-game">
+            Nueva partida
+          </button>
+        </React.Fragment>
+      )}
     </div>
   );
 }
