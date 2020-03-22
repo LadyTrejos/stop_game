@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useSubscription, useMutation, useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
-import logo from "./logo.svg";
-
+import MyCard from "./MyCard";
 import "./App.scss";
 
 const GET_POST = gql`
@@ -50,6 +49,7 @@ const INSERT_GAME = gql`
 `;
 
 function App() {
+  const [active, setActive] = useState(false);
   const [InsertGame] = useMutation(INSERT_GAME);
   const [gameID, setGameID] = useState(null);
   const [playerID, setPlayerID] = useState(null);
@@ -65,6 +65,7 @@ function App() {
 
   function newGame() {
     // InsertGame(); //descomentar
+    setActive(true);
     console.log("nueva partida");
     setGameID(1);
     setPlayerID(2);
@@ -73,9 +74,10 @@ function App() {
   return (
     <div className="App">
       <div className="stop-title">Stop!</div>
-      <div className="new-game">
-        <button onClick={() => newGame()}>Nueva partida</button>
-      </div>
+      <button onClick={() => newGame()} className="new-game">
+        Nueva partida
+      </button>
+      <MyCard currentPlayer={1} game={1} />
     </div>
   );
 }
