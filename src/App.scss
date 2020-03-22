@@ -2,9 +2,12 @@
 @import url("https://fonts.googleapis.com/css?family=Neucha&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Kalam&display=swap");
 
-$font-title: "Kaushan Script", cursive;
-$font-text: "Neucha", cursive;
-$font-handwritten: "Kalam", cursive;
+$font-title: "Kaushan Script",
+cursive;
+$font-text: "Neucha",
+cursive;
+$font-handwritten: "Kalam",
+cursive;
 
 $border-radius: 0 0 125px 3px/3px 85px 5px 55px;
 $border-radius-rounded: 4px;
@@ -15,10 +18,26 @@ $gray: #e4e4e4;
   border: $width solid $gray;
 }
 
+@mixin gridBackground() {
+  background-image: linear-gradient($gray 1px, transparent 1px),
+    linear-gradient(90deg, $gray 1px, transparent 1px);
+  background-size: 20px 20px, 20px 20px, 20px 20px, 20px 20px;
+  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+}
+
 $primary-color: #28dad4;
+
+html,
+body {
+  height: 100%;
+}
+
 body {
   background-color: $primary-color;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .stop-title {
@@ -46,11 +65,7 @@ body {
   padding: 2rem 2rem 1.2rem;
   margin: 20px;
   position: relative;
-
-  background-image: linear-gradient($gray 1px, transparent 1px),
-    linear-gradient(90deg, $gray 1px, transparent 1px);
-  background-size: 20px 20px, 20px 20px, 20px 20px, 20px 20px;
-  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+  @include gridBackground();
 
   &:before,
   &:after {
@@ -77,9 +92,11 @@ body {
   .hole-top {
     top: 10%;
   }
+
   .hole-middle {
     top: 45%;
   }
+
   .hole-bottom {
     bottom: 10%;
   }
@@ -118,5 +135,40 @@ body {
   display: table-cell;
 }
 
-.stop-button {
+.stop-button {}
+
+.players-card {
+  width: 600px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: $border-radius;
+  transition: 1.1s ease-out;
+  box-shadow:
+    -2rem 2rem 2rem rgba(black, 0.2);
+
+  @include gridBackground();
+
+  h1 {
+    font-family: $font-text;
+  }
+
+  ul {
+    list-style-type: none;
+    width: 50%;
+    margin: 0 auto;
+    font-size: 1.5rem;
+    font-family: $font-handwritten;
+
+    li {
+      background-image: linear-gradient(to right, transparent 50%, rgba($color: $primary-color, $alpha: 0.4) 50%);
+      background-position: -0% 0;
+      background-size: 200% auto;
+      transition: background-position 0.5s ease-out;
+
+      &:hover {
+        background-position: -99.9% 0;
+        cursor: pointer;
+      }
+    }
+  }
 }
