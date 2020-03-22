@@ -23,8 +23,8 @@ body {
 
 .stop-title {
   font-family: $font-title;
-  font-size: 4rem;
-  padding: 2vh 0;
+  font-size: 3rem;
+  padding: 1vh 0;
   color: white;
   text-shadow: -4px 4px 0px rgba(0, 0, 0, 0.5);
 }
@@ -116,4 +116,7 @@ body {
 
 .cell {
   display: table-cell;
+}
+
+.stop-button {
 }
