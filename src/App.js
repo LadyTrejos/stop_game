@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSubscription } from "@apollo/react-hooks";
 import sql from "graphql-tag";
-import logo from "./logo.svg";
 
 import "./App.scss";
-
+import MyCard from "./MyCard";
 
 const GET_POST = sql`
 subscription GetStop {
@@ -22,23 +21,27 @@ subscription GetStop {
 `;
 
 function App() {
+  const [active, setActive] = useState(false);
   const { loading, error, data } = useSubscription(GET_POST);
 
   if (loading) {
     console.log("cargando");
   } else {
-    console.log("data: ", data)}
+    console.log("data: ", data);
+  }
 
   function newGame() {
+    setActive(true);
     console.log("nueva partida");
   }
 
   return (
     <div className="App">
       <div className="stop-title">Stop!</div>
-      <div className="new-game">
-        <button onClick={() => newGame()}>Nueva partida</button>
-      </div>
+      <button onClick={() => newGame()} className="new-game">
+        Nueva partida
+      </button>
+      <MyCard currentPlayer={1} game={1} />
     </div>
   );
 }
