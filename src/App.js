@@ -1,42 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSubscription, useMutation, useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import MyCard from "./MyCard";
 import "./App.scss";
-
-const GET_POST = gql`
-  subscription GetStop($game_id: Int!, $player_id: Int!) {
-    stop(
-      where: { game_id: { _eq: $game_id }, player_id: { _neq: $player_id } }
-    ) {
-      animal
-      apellido
-      ciudad
-      color
-      cosa
-      fruta
-      nombre
-      pais
-    }
-  }
-`;
-
-const GET_POST2 = gql`
-  subscription GetStop($game_id: Int!, $player_id: Int!) {
-    stop(
-      where: { game_id: { _eq: $game_id }, player_id: { _neq: $player_id } }
-    ) {
-      animal
-      apellido
-      ciudad
-      color
-      cosa
-      fruta
-      nombre
-      pais
-    }
-  }
-`;
 
 const INSERT_GAME = gql`
   mutation InsertGame {
@@ -48,36 +14,59 @@ const INSERT_GAME = gql`
   }
 `;
 
+const GET_LAST_GAME = gql`
+  subscription GetlastGame {
+    games(limit: 1, order_by: { id: desc }) {
+      id
+    }
+  }
+`;
+
 function App() {
-  const [active, setActive] = useState(false);
-  const [InsertGame] = useMutation(INSERT_GAME);
   const [gameID, setGameID] = useState(null);
   const [playerID, setPlayerID] = useState(null);
-  const { loading, error, data } = useSubscription(GET_POST, {
-    variables: { game_id: gameID, player_id: playerID }
+  const [temporalGameId, setTemporalGameId] = useState(null);
+  const [active, setActive] = useState(false);
+  const [InsertGame] = useMutation(INSERT_GAME);
+  const { loading, error, data } = useSubscription(GET_LAST_GAME);
+
+  const prevGameIdRef = useRef();
+
+  useEffect(() => {
+    if (!loading) {
+      prevGameIdRef.current = data.games[0].id;
+    }
   });
+
+  const prevGameId = prevGameIdRef.current;
 
   if (loading) {
     console.log("cargando");
   } else {
-    console.log("data: ", data);
+    if (temporalGameId != prevGameId) {
+      setTemporalGameId(prevGameId);
+      setGameID(data.games[0].id);
+      setActive(true);
+    }
   }
 
   function newGame() {
-    // InsertGame(); //descomentar
+    InsertGame().then(res => {
+      setGameID(res.data.insert_games.returning[0].id);
+    });
+
     setActive(true);
-    console.log("nueva partida");
-    setGameID(1);
-    setPlayerID(2);
+    console.log("nueva partida: ");
   }
-  let stops = null;
   return (
     <div className="App">
       <div className="stop-title">Stop!</div>
       <button onClick={() => newGame()} className="new-game">
         Nueva partida
       </button>
-      <MyCard currentPlayer={1} game={1} />
+      {console.log("idGame: ", gameID)}
+
+      {active ? <MyCard currentPlayer={1} game={gameID} /> : null}
     </div>
   );
 }

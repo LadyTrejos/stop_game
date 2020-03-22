@@ -1,8 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSubscription, useMutation, useQuery } from "@apollo/react-hooks";
+import gql from "graphql-tag";
+
+const GET_POST = gql`
+  subscription GetStop($game_id: Int!, $player_id: Int!) {
+    stop(
+      where: { game_id: { _eq: $game_id }, player_id: { _neq: $player_id } }
+    ) {
+      animal
+      apellido
+      ciudad
+      color
+      cosa
+      fruta
+      nombre
+      pais
+    }
+  }
+`;
 
 export default function MyCard({ currentPlayer, game }) {
+  const [gameID, setGameID] = useState(null);
+  const [playerID, setPlayerID] = useState(null);
+
+  const { loading, error, data } = useSubscription(GET_POST, {
+    variables: { game_id: gameID, player_id: playerID }
+  });
+
+  if (loading) {
+    console.log("cargando");
+  } else {
+    console.log("data: ", data);
+  }
+
   return (
     <div className="card">
+      <h1>{game}</h1>
       <form className="table">
         <div className="row">
           <label className="cell">Nombre</label>
