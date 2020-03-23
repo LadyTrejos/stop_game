@@ -81,11 +81,12 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
   const [gameID, setGameID] = useState(game);
   const [playerID, setPlayerID] = useState(currentPlayer);
   const [formError, setFormError] = useState(null);
-  const [disabled, setDisabled] = useState(false);
-  const [disabledInput, setDisabledInput] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+  const [disabledInput, setDisabledInput] = useState(true);
   const [loadData, setLoadData] = useState(false);
   const [listening, setListening] = useState(true);
   const [isFirstTime, setIsFirstTime] = useState(true);
+  const [isTheEnd, setIsTheEnd] = useState(false);
   const [isReady, setIsReady] = useState(false);
   // const [visibleLetter, setVisibleLetter] = useState(false);
 
@@ -114,7 +115,8 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
   );
 
   if (isFirstTime) {
-    //si es la primera vez que entra a la partida actual, registra el id del jugador con el id de la partida actual
+    //si es la primera vez que entra a la partida actual,
+    //registra el id del jugador con el id de la partida actual
     setIsFirstTime(false);
     insertGamePlayer({
       variables: { game_id: game, player_id: currentPlayer }
@@ -144,18 +146,17 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
     }
   }
 
-  const { loading, error, data } = useSubscription(GET_POST, {
+  const { loading, error, data = {} } = useSubscription(GET_POST, {
     variables: { game_id: gameID, player_id: playerID }
   });
 
   if (!loading) {
-    console.log("data length: ", data);
     // Si el otro jugador da stop, deshabilita mis campos
     if (data.stop.length > 0 && !disabledInput) {
-      console.log("cambiar valores");
       setDisabledInput(true);
       setDisabled(true);
       setLoadData(true);
+      setIsTheEnd(true);
     }
   }
 
@@ -291,8 +292,12 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
           <div className="hole hole-middle"></div>
           <div className="hole hole-bottom"></div>
         </div>
-        <button type="submit" className="stop-button" disabled={disabled}>
-          Stop
+        <button
+          type="submit"
+          className={`stop-button ${isTheEnd ? "end" : ""}`}
+          disabled={disabled}
+        >
+          Stop!
         </button>
       </form>
     </React.Fragment>

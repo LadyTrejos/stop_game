@@ -30,27 +30,24 @@ export default function MyCard({ currentPlayer, game }) {
   if (loading) {
     console.log("cargando");
   } else {
-    console.log("data: ", data);
-
     if (data.stop.length > 0) {
       newData = Object.entries(data.stop[0]);
     }
 
     console.log("newData: ", newData);
   }
-
   return (
     <div className="table">
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
+      <div className={`flip-card ${newData ? "flip" : ""}`}>
+        <div className="flip-card-inner">
+          <div className="flip-card-front">
             <div className="card">
               Jugando...<div className="hole hole-top-right"></div>
               <div className="hole hole-middle-right"></div>
               <div className="hole hole-bottom-right"></div>
             </div>
           </div>
-          <div class="flip-card-back">
+          <div className={"flip-card-back"}>
             <div className="card">
               <div className="row">
                 <label className="cell">Nombre</label>
