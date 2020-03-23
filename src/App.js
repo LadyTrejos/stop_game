@@ -54,6 +54,7 @@ function App() {
     }
     if (typeof temporalGameId == "number" && !active) {
       setGameID(data.games[0].id);
+      setGameLetter(data.games[0].letter);
       setActive(true);
       showModal();
     }

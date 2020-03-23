@@ -54,8 +54,30 @@ const INSERT_STOP = gql`
   }
 `;
 
+const INSERT_GAME_PLAYER = gql`
+  mutation InsertGamePlayer($game_id: Int!, $player_id: Int!) {
+    insert_games_players(
+      objects: { game_id: $game_id, player_id: $player_id }
+    ) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
+const GET_GAME_PLAYER = gql`
+  subscription GetGamePlayer($game_id: Int!) {
+    games_players(where: { game_id: { _eq: $game_id } }) {
+      player_id
+    }
+  }
+`;
+
 export default function MyCard({ currentPlayer, game, gameLetter }) {
   const [insertGame] = useMutation(INSERT_STOP);
+  const [insertGamePlayer] = useMutation(INSERT_GAME_PLAYER);
+
   const [gameID, setGameID] = useState(game);
   const [playerID, setPlayerID] = useState(currentPlayer);
   const [formError, setFormError] = useState(null);
@@ -63,8 +85,14 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
   const [disabledInput, setDisabledInput] = useState(false);
   const [loadData, setLoadData] = useState(false);
   const [listening, setListening] = useState(true);
+  const [isFirstTime, setIsFirstTime] = useState(true);
+  const [isReady, setIsReady] = useState(false);
+  // const [visibleLetter, setVisibleLetter] = useState(false);
+
+  let visibleLetter = false;
 
   function disableButton() {
+    //desabilita el botón de stop para que no se oprima varias veces y haga muchos insert
     setDisabled(true);
     setListening(false);
   }
@@ -85,22 +113,56 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
     ({ err }) => setFormError(err)
   );
 
+  if (isFirstTime) {
+    //si es la primera vez que entra a la partida actual, registra el id del jugador con el id de la partida actual
+    setIsFirstTime(false);
+    insertGamePlayer({
+      variables: { game_id: game, player_id: currentPlayer }
+    });
+  }
+
+  const getGamePlayer = useSubscription(GET_GAME_PLAYER, {
+    variables: { game_id: game }
+  });
+
+  if (!getGamePlayer.loading) {
+    //si solo hay un jugador desabilita todos los campos
+    if (getGamePlayer.data.games_players.length === 1) {
+      if (!disabled && !disabledInput) {
+        setDisabled(true);
+        setDisabledInput(true);
+      }
+    } else {
+      //cuando hay más de un jugador, todo se habilita para que empiece el juego
+      visibleLetter = true;
+      if (disabled && disabledInput && !isReady) {
+        console.log("entra a cambiar valores");
+        setDisabled(false);
+        setDisabledInput(false);
+        setIsReady(true);
+      }
+    }
+  }
+
   const { loading, error, data } = useSubscription(GET_POST, {
     variables: { game_id: gameID, player_id: playerID }
   });
 
-  if (loading) {
-    console.log("cargando");
-  } else {
-    // console.log("data: ", data);
+  if (!loading) {
+    console.log("data length: ", data);
+    // Si el otro jugador da stop, deshabilita mis campos
     if (data.stop.length > 0 && !disabledInput) {
+      console.log("cambiar valores");
       setDisabledInput(true);
       setDisabled(true);
+      setLoadData(true);
     }
   }
 
-  if (disabledInput && !loadData && listening) {
-    setLoadData(true);
+  if (disabledInput && loadData && listening) {
+    //cuando el oponente da stop, envía los datos a la base de datos
+    setLoadData(false);
+    setListening(false);
     let viewValues = Object.entries(inputs);
 
     insertGame({
@@ -131,7 +193,9 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
         onSubmit={e => handleSubmit(e, inputs, disableButton)}
         autoComplete="off"
       >
-        <div style={{ paddingTop: "30px" }}>Letra: {gameLetter}</div>
+        <div style={{ paddingTop: "50px" }}>
+          Letra: {visibleLetter ? gameLetter : ""}
+        </div>
         <div className="card">
           <div>{formError}</div>
           <div className="row">
