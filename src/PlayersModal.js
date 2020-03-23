@@ -12,9 +12,14 @@ const PLAYERS = [
 ];
 
 const PlayersModal = ({ visible, closeModal }) => {
-  const [player, setPlayer] = useState(null);
+  const [playerChosen, setPlayerChosen] = useState(null);
   function handleSubmit() {
-    console.log(player);
+    console.log(playerChosen);
+    if (playerChosen) {
+      closeModal();
+    } else {
+      alert("Elije un jugador.");
+    }
   }
   return (
     <React.Fragment>
@@ -23,7 +28,11 @@ const PlayersModal = ({ visible, closeModal }) => {
           <h1>Elige un jugador</h1>
           <ul>
             {PLAYERS.map(player => (
-              <li key={player.id} onClick={() => setPlayer(player.id)}>
+              <li
+                key={player.id}
+                onClick={() => setPlayerChosen(player.id)}
+                className={player.id == playerChosen ? "selected" : ""}
+              >
                 {player.nombre}
               </li>
             ))}
