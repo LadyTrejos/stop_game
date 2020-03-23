@@ -11,16 +11,15 @@ const PLAYERS = [
   }
 ];
 
-const PlayersModal = ({ visible, closeModal }) => {
+const PlayersModal = props => {
+  const { visible, closeModal } = props;
   const [playerChosen, setPlayerChosen] = useState(null);
+
   function handleSubmit() {
-    console.log(playerChosen);
-    if (playerChosen) {
-      closeModal();
-    } else {
-      alert("Elije un jugador.");
-    }
+    props.getPlayerID(playerChosen);
+    closeModal();
   }
+
   return (
     <React.Fragment>
       {visible ? (
@@ -36,7 +35,12 @@ const PlayersModal = ({ visible, closeModal }) => {
                 {player.nombre}
               </li>
             ))}
-            <button onClick={() => handleSubmit()}>Aceptar</button>
+            <button
+              onClick={() => handleSubmit()}
+              disabled={!playerChosen ? true : false}
+            >
+              Aceptar
+            </button>
           </ul>
         </div>
       ) : null}

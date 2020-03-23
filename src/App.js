@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSubscription, useMutation, useQuery } from "@apollo/react-hooks";
+import { useSubscription, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import MyCard from "./MyCard";
 import OpponentCard from "./OpponentCard";
@@ -46,10 +46,13 @@ function App() {
   if (loading) {
     console.log("cargando");
   } else {
-    if (temporalGameId != prevGameId) {
+    if (temporalGameId !== prevGameId) {
       setTemporalGameId(prevGameId);
+    }
+    if (typeof temporalGameId == "number" && !active) {
       setGameID(data.games[0].id);
       setActive(true);
+      showModal();
     }
   }
 
@@ -60,7 +63,6 @@ function App() {
 
     setActive(true);
     showModal();
-    console.log("nueva partida: ");
   }
 
   function showModal() {
@@ -70,16 +72,24 @@ function App() {
   function closeModal() {
     setVisibleModal(false);
   }
+
+  function getPlayerID(id) {
+    setPlayerID(id);
+  }
   return (
     <div>
       {active ? (
         <React.Fragment>
           {visibleModal ? (
-            <PlayersModal visible={visibleModal} closeModal={closeModal} />
+            <PlayersModal
+              visible={visibleModal}
+              closeModal={closeModal}
+              getPlayerID={getPlayerID}
+            />
           ) : (
             <React.Fragment>
-              <MyCard currentPlayer={1} game={1} />
-              <OpponentCard />
+              <MyCard currentPlayer={playerID} game={gameID} />
+              <OpponentCard currentPlayer={playerID} game={gameID} />
             </React.Fragment>
           )}
         </React.Fragment>
