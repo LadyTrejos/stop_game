@@ -10,6 +10,7 @@ $font-handwritten: "Kalam",
 cursive;
 
 $border-radius: 0 0 125px 3px/3px 85px 5px 55px;
+$border-thin: 255px 15px 225px 15px/15px 225px 15px 255px;
 $border-radius-rounded: 4px;
 $box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 $primary-color: #28dad4;
@@ -137,6 +138,8 @@ body {
     font-weight: 700;
     letter-spacing: 1px;
     color: $pen-color;
+    text-transform: uppercase;
+    letter-spacing: 2px;
   }
 }
 
@@ -146,7 +149,7 @@ body {
 
 
   input {
-    border-radius: $border-radius;
+    border-radius: $border-thin;
     padding: 10px;
     border: 1px solid darken($gray, 15);
     background-color: transparent;
@@ -156,18 +159,10 @@ body {
     letter-spacing: 1px;
 
     color: darken($color: $gray, $amount: 50);
-    ;
 
-    &:before,
-    &:after {
-      top: 0;
-      left: 0.25%;
-      height: 100%;
-      border: inherit;
-      border-radius: $border-radius-rounded;
-      transform: rotate(-0.1deg) scaleX(-1);
-      z-index: -1;
-      width: 99.5%;
+    &:focus {
+      outline: none;
+      border: 1px solid $secondary-color;
     }
 
   }
@@ -177,7 +172,35 @@ body {
   display: table-cell;
 }
 
-.stop-button {}
+.stop-button {
+  width: 20%;
+  transform: rotate(-2deg);
+  font-family: $font-title;
+  font-size: 2.5rem;
+  background-color: white;
+  color: white;
+  transition: 0.25s;
+  background-color: transparent;
+
+  border-radius: $border-thin;
+
+  &:hover,
+  &:focus {
+    animation: pulse 1s;
+    box-shadow: 0 0 0 2em rgba(#fff, 0);
+    border-color: coral;
+    color: coral;
+    background-color: rgba($color: white, $alpha: 0.2);
+    text-shadow: 2px 2px 0 white;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 coral;
+    }
+  }
+
+}
 
 .players-card {
   padding: 1rem;
@@ -246,7 +269,7 @@ body {
   background-color: transparent;
   // width: 300px;
   // height: 300px;
-  perspective: 1200px;
+  perspective: 3000px;
   min-height: 260px;
 }
 
