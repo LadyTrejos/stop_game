@@ -40,93 +40,106 @@ export default function MyCard({ currentPlayer, game }) {
   }
 
   return (
-    <form className="table">
-      <div className="card">
-        <div className="row">
-          <label className="cell">Nombre</label>
-          <label className="cell">Apellido</label>
-          <label className="cell">Ciudad</label>
-          <label className="cell">País</label>
+    <div className="table">
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div className="card">
+              Jugando...<div className="hole hole-top-right"></div>
+              <div className="hole hole-middle-right"></div>
+              <div className="hole hole-bottom-right"></div>
+            </div>
+          </div>
+          <div class="flip-card-back">
+            <div className="card">
+              <div className="row">
+                <label className="cell">Nombre</label>
+                <label className="cell">Apellido</label>
+                <label className="cell">Ciudad</label>
+                <label className="cell">País</label>
+              </div>
+              <div className="row">
+                <div className="cell">
+                  <input
+                    id="nombre"
+                    type="text"
+                    defaultValue={newData ? newData[6][1] : ""}
+                    disabled
+                  ></input>
+                </div>
+                <div className="cell">
+                  <input
+                    id="apellido"
+                    type="text"
+                    defaultValue={newData ? newData[1][1] : ""}
+                    disabled
+                  ></input>
+                </div>
+                <div className="cell">
+                  <input
+                    id="ciudad"
+                    type="text"
+                    defaultValue={newData ? newData[2][1] : ""}
+                    disabled
+                  ></input>
+                </div>
+                <div className="cell">
+                  <input
+                    id="pais"
+                    type="text"
+                    defaultValue={newData ? newData[7][1] : ""}
+                    disabled
+                  ></input>
+                </div>
+              </div>
+              <br />
+              <div className="row">
+                <label className="cell">Animal</label>
+                <label className="cell">Fruta</label>
+                <label className="cell">Color</label>
+                <label className="cell">Cosa</label>
+              </div>
+              <div className="row">
+                <div className="cell">
+                  <input
+                    id="animal"
+                    type="text"
+                    defaultValue={newData ? newData[0][1] : ""}
+                    disabled
+                  ></input>
+                </div>
+                <div className="cell">
+                  <input
+                    id="fruta"
+                    type="text"
+                    defaultValue={newData ? newData[5][1] : ""}
+                    disabled
+                  ></input>
+                </div>
+                <div className="cell">
+                  <input
+                    id="color"
+                    type="text"
+                    defaultValue={newData ? newData[3][1] : ""}
+                    disabled
+                  ></input>
+                </div>
+                <div className="cell">
+                  <input
+                    id="cosa"
+                    type="text"
+                    defaultValue={newData ? newData[4][1] : ""}
+                    disabled
+                  ></input>
+                </div>
+              </div>
+              <div className="hole hole-top"></div>
+              <div className="hole hole-middle"></div>
+              <div className="hole hole-bottom"></div>
+            </div>
+          </div>
         </div>
-        <div className="row">
-          <div className="cell">
-            <input
-              id="nombre"
-              type="text"
-              defaultValue={newData ? newData[6][1] : ""}
-              disabled
-            ></input>
-          </div>
-          <div className="cell">
-            <input
-              id="apellido"
-              type="text"
-              defaultValue={newData ? newData[1][1] : ""}
-              disabled
-            ></input>
-          </div>
-          <div className="cell">
-            <input
-              id="ciudad"
-              type="text"
-              defaultValue={newData ? newData[2][1] : ""}
-              disabled
-            ></input>
-          </div>
-          <div className="cell">
-            <input
-              id="pais"
-              type="text"
-              defaultValue={newData ? newData[7][1] : ""}
-              disabled
-            ></input>
-          </div>
-        </div>
-        <br />
-        <div className="row">
-          <label className="cell">Animal</label>
-          <label className="cell">Fruta</label>
-          <label className="cell">Color</label>
-          <label className="cell">Cosa</label>
-        </div>
-        <div className="row">
-          <div className="cell">
-            <input
-              id="animal"
-              type="text"
-              defaultValue={newData ? newData[0][1] : ""}
-              disabled
-            ></input>
-          </div>
-          <div className="cell">
-            <input
-              id="fruta"
-              type="text"
-              defaultValue={newData ? newData[5][1] : ""}
-              disabled
-            ></input>
-          </div>
-          <div className="cell">
-            <input
-              id="color"
-              type="text"
-              defaultValue={newData ? newData[3][1] : ""}
-              disabled
-            ></input>
-          </div>
-          <div className="cell">
-            <input
-              id="cosa"
-              type="text"
-              defaultValue={newData ? newData[4][1] : ""}
-              disabled
-            ></input>
-          </div>
-        </div>
-        <div className="hole hole-top"></div>
-        <div className="hole hole-middle"></div>
-        <div className="hole hole-bottom"></div>
       </div>
-    </form>
+    </div>
   );
 }
