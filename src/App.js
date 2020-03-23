@@ -7,10 +7,11 @@ import PlayersModal from "./PlayersModal";
 import "./App.scss";
 
 const INSERT_GAME = gql`
-  mutation InsertGame {
-    insert_games(objects: {}) {
+  mutation InsertGame($letter: String!) {
+    insert_games(objects: { letter: $letter }) {
       returning {
         id
+        letter
       }
     }
   }
@@ -20,12 +21,14 @@ const GET_LAST_GAME = gql`
   subscription GetlastGame {
     games(limit: 1, order_by: { id: desc }) {
       id
+      letter
     }
   }
 `;
 
 function App() {
   const [gameID, setGameID] = useState(null);
+  const [gameLetter, setGameLetter] = useState(null);
   const [playerID, setPlayerID] = useState(null);
   const [temporalGameId, setTemporalGameId] = useState(null);
   const [active, setActive] = useState(false);
@@ -56,9 +59,21 @@ function App() {
     }
   }
 
+  function makeid(length = 1) {
+    var result = "";
+    var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+
   function newGame() {
-    InsertGame().then(res => {
+    InsertGame({ variables: { letter: makeid() } }).then(res => {
+      console.log(res);
       setGameID(res.data.insert_games.returning[0].id);
+      setGameLetter(res.data.insert_games.returning[0].letter);
     });
 
     setActive(true);
@@ -88,7 +103,11 @@ function App() {
             />
           ) : (
             <React.Fragment>
-              <MyCard currentPlayer={playerID} game={gameID} />
+              <MyCard
+                currentPlayer={playerID}
+                game={gameID}
+                gameLetter={gameLetter}
+              />
               <OpponentCard currentPlayer={playerID} game={gameID} />
             </React.Fragment>
           )}

@@ -54,7 +54,7 @@ const INSERT_STOP = gql`
   }
 `;
 
-export default function MyCard({ currentPlayer, game }) {
+export default function MyCard({ currentPlayer, game, gameLetter }) {
   const [insertGame] = useMutation(INSERT_STOP);
   const [gameID, setGameID] = useState(game);
   const [playerID, setPlayerID] = useState(currentPlayer);
@@ -131,6 +131,7 @@ export default function MyCard({ currentPlayer, game }) {
         onSubmit={e => handleSubmit(e, inputs, disableButton)}
         autoComplete="off"
       >
+        <div style={{ paddingTop: "30px" }}>Letra: {gameLetter}</div>
         <div className="card">
           <div>{formError}</div>
           <div className="row">
