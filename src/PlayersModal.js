@@ -1,19 +1,26 @@
 import React, { useState } from "react";
+import gql from "graphql-tag";
+import { useSubscription, useMutation } from "@apollo/react-hooks";
 
-const PLAYERS = [
-  {
-    nombre: "lady",
-    id: 1
-  },
-  {
-    nombre: "ivan",
-    id: 2
+const GET_PLAYERS = gql`
+  subscription GetPlayers {
+    players {
+      id
+      nombre
+    }
   }
-];
+`;
+
+let PLAYERS = [];
 
 const PlayersModal = props => {
   const { visible, closeModal } = props;
   const [playerChosen, setPlayerChosen] = useState(null);
+  const { loading, error, data } = useSubscription(GET_PLAYERS);
+
+  if (!loading) {
+    PLAYERS = data.players;
+  }
 
   function handleSubmit() {
     props.getPlayerID(playerChosen);
