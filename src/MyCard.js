@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSubscription } from "@apollo/react-hooks";
+import { useSubscription, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import useStopForm from "./lib/CustomHooks";
 
@@ -20,14 +20,53 @@ const GET_POST = gql`
   }
 `;
 
+const INSERT_STOP = gql`
+  mutation InsertStop(
+    $animal: String!
+    $apellido: String!
+    $ciudad: String!
+    $color: String!
+    $cosa: String!
+    $fruta: String!
+    $nombre: String!
+    $pais: String!
+    $player_id: Int!
+    $game_id: Int!
+  ) {
+    insert_stop(
+      objects: {
+        animal: $animal
+        apellido: $apellido
+        ciudad: $ciudad
+        color: $color
+        cosa: $cosa
+        fruta: $fruta
+        nombre: $nombre
+        pais: $pais
+        player_id: $player_id
+        game_id: $game_id
+      }
+    ) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
 export default function MyCard({ currentPlayer, game }) {
-  const [gameID, setGameID] = useState(null);
-  const [playerID, setPlayerID] = useState(null);
+  const [insertGame] = useMutation(INSERT_STOP);
+  const [gameID, setGameID] = useState(game);
+  const [playerID, setPlayerID] = useState(currentPlayer);
   const [formError, setFormError] = useState(null);
   const [disabled, setDisabled] = useState(false);
+  const [disabledInput, setDisabledInput] = useState(false);
+  const [loadData, setLoadData] = useState(false);
+  const [listening, setListening] = useState(true);
 
   function disableButton() {
     setDisabled(true);
+    setListening(false);
   }
 
   const { inputs, handleInputChange, handleSubmit } = useStopForm(
@@ -40,8 +79,8 @@ export default function MyCard({ currentPlayer, game }) {
       fruta: "",
       color: "",
       cosa: "",
-      game_id: game,
-      player_id: currentPlayer
+      game_id: gameID,
+      player_id: playerID
     },
     ({ err }) => setFormError(err)
   );
@@ -53,7 +92,31 @@ export default function MyCard({ currentPlayer, game }) {
   if (loading) {
     console.log("cargando");
   } else {
-    console.log("data: ", data);
+    // console.log("data: ", data);
+    if (data.stop.length > 0 && !disabledInput) {
+      setDisabledInput(true);
+      setDisabled(true);
+    }
+  }
+
+  if (disabledInput && !loadData && listening) {
+    setLoadData(true);
+    let viewValues = Object.entries(inputs);
+
+    insertGame({
+      variables: {
+        animal: viewValues[4][1],
+        apellido: viewValues[1][1],
+        ciudad: viewValues[2][1],
+        color: viewValues[6][1],
+        cosa: viewValues[7][1],
+        fruta: viewValues[5][1],
+        nombre: viewValues[0][1],
+        pais: viewValues[3][1],
+        player_id: viewValues[9][1],
+        game_id: viewValues[8][1]
+      }
+    });
   }
 
   function onChange(e) {
@@ -66,6 +129,7 @@ export default function MyCard({ currentPlayer, game }) {
       <form
         className="table"
         onSubmit={e => handleSubmit(e, inputs, disableButton)}
+        autoComplete="off"
       >
         <div className="card">
           <div>{formError}</div>
@@ -82,6 +146,7 @@ export default function MyCard({ currentPlayer, game }) {
                 type="text"
                 onChange={e => onChange(e)}
                 value={inputs.nombre}
+                disabled={disabledInput}
               />
             </div>
             <div className="cell">
@@ -90,6 +155,7 @@ export default function MyCard({ currentPlayer, game }) {
                 type="text"
                 onChange={e => onChange(e)}
                 value={inputs.apellido}
+                disabled={disabledInput}
               />
             </div>
             <div className="cell">
@@ -98,6 +164,7 @@ export default function MyCard({ currentPlayer, game }) {
                 type="text"
                 onChange={e => onChange(e)}
                 value={inputs.ciudad}
+                disabled={disabledInput}
               />
             </div>
             <div className="cell">
@@ -106,6 +173,7 @@ export default function MyCard({ currentPlayer, game }) {
                 type="text"
                 onChange={e => onChange(e)}
                 value={inputs.pais}
+                disabled={disabledInput}
               />
             </div>
           </div>
@@ -123,6 +191,7 @@ export default function MyCard({ currentPlayer, game }) {
                 type="text"
                 onChange={e => onChange(e)}
                 value={inputs.animal}
+                disabled={disabledInput}
               />
             </div>
             <div className="cell">
@@ -131,6 +200,7 @@ export default function MyCard({ currentPlayer, game }) {
                 type="text"
                 onChange={e => onChange(e)}
                 value={inputs.fruta}
+                disabled={disabledInput}
               />
             </div>
             <div className="cell">
@@ -139,6 +209,7 @@ export default function MyCard({ currentPlayer, game }) {
                 type="text"
                 onChange={e => onChange(e)}
                 value={inputs.color}
+                disabled={disabledInput}
               />
             </div>
             <div className="cell">
@@ -147,6 +218,7 @@ export default function MyCard({ currentPlayer, game }) {
                 type="text"
                 onChange={e => onChange(e)}
                 value={inputs.cosa}
+                disabled={disabledInput}
               />
             </div>
           </div>

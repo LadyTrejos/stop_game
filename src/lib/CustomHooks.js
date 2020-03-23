@@ -58,7 +58,6 @@ const useStopForm = (initialValues, callback = () => {}) => {
 
     if (empty) {
       message = "faltan por llenar algunos campos";
-      // alert("faltan por llenarse", 1000);
     } else {
       disableButton();
       insertGame({

@@ -1,6 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSubscription, useMutation } from "@apollo/react-hooks";
+import gql from "graphql-tag";
+
+const GET_POST = gql`
+  subscription GetStop($game_id: Int!, $player_id: Int!) {
+    stop(
+      where: { game_id: { _eq: $game_id }, player_id: { _neq: $player_id } }
+    ) {
+      animal
+      apellido
+      ciudad
+      color
+      cosa
+      fruta
+      nombre
+      pais
+    }
+  }
+`;
 
 export default function MyCard({ currentPlayer, game }) {
+  const [empty, setEmpty] = useState(true);
+  let newData = null;
+
+  const { loading, error, data } = useSubscription(GET_POST, {
+    variables: { game_id: game, player_id: currentPlayer }
+  });
+
+  if (loading) {
+    console.log("cargando");
+  } else {
+    console.log("data: ", data);
+
+    if (data.stop.length > 0) {
+      newData = Object.entries(data.stop[0]);
+    }
+
+    console.log("newData: ", newData);
+  }
+
   return (
     <form className="table">
       <div className="card">
@@ -12,16 +50,36 @@ export default function MyCard({ currentPlayer, game }) {
         </div>
         <div className="row">
           <div className="cell">
-            <input id="nombre" type="text"></input>
+            <input
+              id="nombre"
+              type="text"
+              defaultValue={newData ? newData[6][1] : ""}
+              disabled
+            ></input>
           </div>
           <div className="cell">
-            <input id="apellido" type="text"></input>
+            <input
+              id="apellido"
+              type="text"
+              defaultValue={newData ? newData[1][1] : ""}
+              disabled
+            ></input>
           </div>
           <div className="cell">
-            <input id="ciudad" type="text"></input>
+            <input
+              id="ciudad"
+              type="text"
+              defaultValue={newData ? newData[2][1] : ""}
+              disabled
+            ></input>
           </div>
           <div className="cell">
-            <input id="pais" type="text"></input>
+            <input
+              id="pais"
+              type="text"
+              defaultValue={newData ? newData[7][1] : ""}
+              disabled
+            ></input>
           </div>
         </div>
         <br />
@@ -33,16 +91,36 @@ export default function MyCard({ currentPlayer, game }) {
         </div>
         <div className="row">
           <div className="cell">
-            <input id="animal" type="text"></input>
+            <input
+              id="animal"
+              type="text"
+              defaultValue={newData ? newData[0][1] : ""}
+              disabled
+            ></input>
           </div>
           <div className="cell">
-            <input id="fruta" type="text"></input>
+            <input
+              id="fruta"
+              type="text"
+              defaultValue={newData ? newData[5][1] : ""}
+              disabled
+            ></input>
           </div>
           <div className="cell">
-            <input id="color" type="text"></input>
+            <input
+              id="color"
+              type="text"
+              defaultValue={newData ? newData[3][1] : ""}
+              disabled
+            ></input>
           </div>
           <div className="cell">
-            <input id="cosa" type="text"></input>
+            <input
+              id="cosa"
+              type="text"
+              defaultValue={newData ? newData[4][1] : ""}
+              disabled
+            ></input>
           </div>
         </div>
         <div className="hole hole-top"></div>
