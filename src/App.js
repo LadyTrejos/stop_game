@@ -62,7 +62,7 @@ function App() {
 
   function makeid(length = 1) {
     var result = "";
-    var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var characters = "ABCDEFGHIJKLMNOPQRSTUVYZ";
     var charactersLength = characters.length;
     for (var i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -92,6 +92,8 @@ function App() {
   function getPlayerID(id) {
     setPlayerID(id);
   }
+
+  console.log("game_id app: ", gameID);
   return (
     <div>
       {active ? (
@@ -101,6 +103,7 @@ function App() {
               visible={visibleModal}
               closeModal={closeModal}
               getPlayerID={getPlayerID}
+              gameID={gameID}
             />
           ) : (
             <React.Fragment>
