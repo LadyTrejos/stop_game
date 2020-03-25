@@ -76,6 +76,7 @@ const GET_GAME_PLAYER = gql`
 
 export default function MyCard({
   currentPlayer,
+  currentPlayerName,
   game,
   gameLetter,
   numberOfPlayers
@@ -192,6 +193,7 @@ export default function MyCard({
 
   return (
     <React.Fragment>
+      <div>{`${currentPlayerName}`}</div>
       <form
         onSubmit={e => handleSubmit(e, inputs, disableButton)}
         autoComplete="off"

@@ -43,7 +43,6 @@ const useStopForm = (initialValues, callback = () => {}) => {
   const handleSubmit = (event, values, disableButton) => {
     if (event) event.preventDefault();
 
-    console.log(values);
     let empty = false;
     let viewValues = Object.entries(values);
     let message = null;

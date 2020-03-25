@@ -27,14 +27,10 @@ export default function MyCard({ currentPlayer, game }) {
     variables: { game_id: game, player_id: currentPlayer }
   });
 
-  if (loading) {
-    console.log("cargando");
-  } else {
+  if (!loading) {
     if (data.stop.length > 0) {
       newData = Object.entries(data.stop[0]);
     }
-
-    console.log("newData: ", newData);
   }
   return (
     <div>

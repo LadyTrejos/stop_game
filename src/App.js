@@ -34,6 +34,7 @@ function App() {
   const [gameID, setGameID] = useState(null);
   const [gameLetter, setGameLetter] = useState(null);
   const [playerID, setPlayerID] = useState(null);
+  const [playerName, setPlayerName] = useState(null);
   const [temporalGameId, setTemporalGameId] = useState(null);
   const [active, setActive] = useState(false);
   const [visibleModal, setVisibleModal] = useState(false);
@@ -78,16 +79,12 @@ function App() {
   }
 
   function newGame() {
-    console.log("number of players: ", numberOfPlayers);
     const pattern = RegExp("^[2-9]{1}$");
 
     if (pattern.test(numOfPlayers)) {
-      console.log("correcto");
-
       InsertGame({
         variables: { letter: makeid(), number_of_players: numOfPlayers }
       }).then(res => {
-        console.log(res);
         setGameID(res.data.insert_games.returning[0].id);
         setGameLetter(res.data.insert_games.returning[0].letter);
         setNumberOfPlayers(
@@ -98,7 +95,6 @@ function App() {
       setActive(true);
       showModal();
     } else {
-      console.log("incorrecto");
       alert("Ingresa solo un número de un dígito mayor o igual a 2");
     }
   }
@@ -111,8 +107,9 @@ function App() {
     setVisibleModal(false);
   }
 
-  function getPlayerID(id) {
+  function getPlayerInfo(id, name) {
     setPlayerID(id);
+    setPlayerName(name);
   }
 
   function onChange(e) {
@@ -123,13 +120,9 @@ function App() {
 
     if (pattern.test(e.target.value)) {
       numOfPlayers = e.target.value;
-      console.log("cumplió ", numOfPlayers);
     }
-
-    console.log("numOfPlayers: ", numOfPlayers);
   }
 
-  console.log("game_id app: ", gameID);
   return (
     <div>
       {active ? (
@@ -138,7 +131,7 @@ function App() {
             <PlayersModal
               visible={visibleModal}
               closeModal={closeModal}
-              getPlayerID={getPlayerID}
+              getPlayerInfo={getPlayerInfo}
               gameID={gameID}
               numberOfPlayers={numberOfPlayers}
             />
@@ -146,6 +139,7 @@ function App() {
             <React.Fragment>
               <MyCard
                 currentPlayer={playerID}
+                currentPlayerName={playerName}
                 game={gameID}
                 gameLetter={gameLetter}
                 numberOfPlayers={numberOfPlayers}
