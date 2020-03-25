@@ -33,7 +33,6 @@ const INSERT_PLAYER = gql`
     }
   }
 `;
-let PLAYERS = [];
 
 const PlayersModal = props => {
   const { visible, closeModal } = props;

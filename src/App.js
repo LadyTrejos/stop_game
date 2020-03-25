@@ -113,13 +113,17 @@ function App() {
   }
 
   function onChange(e) {
+    // console.log("--> ", e.target.value);
     const pattern = RegExp("^[2-9]{1}$");
     if (e.target.value.length > 1) {
-      e.target.value.slice(0, 1);
+      e.target.value = e.target.value.slice(0, 1);
     }
 
     if (pattern.test(e.target.value)) {
       numOfPlayers = e.target.value;
+    } else {
+      e.target.value = null;
+      numOfPlayers = null;
     }
   }
 
