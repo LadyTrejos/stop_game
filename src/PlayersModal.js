@@ -23,8 +23,28 @@ const INSERT_PLAYER = gql`
 
 const PlayersModal = props => {
   const { visible, closeModal } = props;
+  const [disabled, setDisabled] = useState(false);
   let playerName = null;
   const [insertPlayer] = useMutation(INSERT_PLAYER);
+
+  let playersOnTheGame = [];
+
+  const playersOn = useSubscription(GET_PLAYERS_ON, {
+    variables: { game_id: props.gameID },
+    onSubscriptionData: ({ subscriptionData }) => {
+      playersOnTheGame = subscriptionData.data.games_players.map(
+        player => player.player_id
+      );
+
+      if (playersOnTheGame.length === props.numberOfPlayers) {
+        setDisabled(true);
+        window.location.reload();
+        alert(
+          "Lo sentimos, ya están completos los jugadores para esta partida"
+        );
+      }
+    }
+  });
 
   function createPlayer(e) {
     if (playerName.trim() === "") {
@@ -55,7 +75,10 @@ const PlayersModal = props => {
           <h1>Elige tu nombre de usuario</h1>
           <span>{`Total jugadores: ${props.numberOfPlayers}`}</span>
           <input type="text" onChange={e => onChange(e)}></input>
-          <button onClick={e => createPlayer(e)}> Crear usuario</button>
+          <button onClick={e => createPlayer(e)} disabled={disabled}>
+            {" "}
+            Crear usuario
+          </button>
         </div>
       ) : null}
     </React.Fragment>

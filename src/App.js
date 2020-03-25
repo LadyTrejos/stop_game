@@ -117,6 +117,7 @@ function App() {
   }
 
   function onChange(e) {
+    // console.log("--> ", e.target.value);
     const pattern = RegExp("^[2-9]{1}$");
     if (e.target.value.length > 1) {
       e.target.value = e.target.value.slice(0, 1);
@@ -124,6 +125,9 @@ function App() {
 
     if (pattern.test(e.target.value)) {
       tempNumOfPlayers = e.target.value;
+    } else {
+      e.target.value = null;
+      tempNumOfPlayers = null;
     }
   }
 
