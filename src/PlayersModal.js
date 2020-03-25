@@ -1,19 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import gql from "graphql-tag";
-import {
-  useSubscription,
-  useLazyQuery,
-  useMutation
-} from "@apollo/react-hooks";
-
-const GET_PLAYERS = gql`
-  query GetPlayers($player_id: [Int!], $limit: Int!) {
-    players(where: { id: { _nin: $player_id } }, limit: $limit) {
-      id
-      nombre
-    }
-  }
-`;
+import { useMutation } from "@apollo/react-hooks";
 
 const GET_PLAYERS_ON = gql`
   subscription GetPlayerOn($game_id: Int!) {
@@ -33,8 +20,6 @@ const INSERT_PLAYER = gql`
     }
   }
 `;
-let PLAYERS = [];
-let playersOnGame = [];
 
 const PlayersModal = props => {
   const { visible, closeModal } = props;
@@ -43,7 +28,7 @@ const PlayersModal = props => {
 
   function createPlayer(e) {
     if (playerName.trim() === "") {
-      alert("El nombre de usuario no puede ser vacio");
+      alert("El nombre de usuario no puede ser vacío.");
     } else {
       const pattern = RegExp("^[a-zA-Z0-9]{1,}$");
       playerName = playerName.trim();
@@ -67,7 +52,8 @@ const PlayersModal = props => {
     <React.Fragment>
       {visible ? (
         <div className="players-card">
-          <h1>Elige tu nombre de usuario {props.numberOfPlayers}</h1>
+          <h1>Elige tu nombre de usuario</h1>
+          <span>{`Total jugadores: ${props.numberOfPlayers}`}</span>
           <input type="text" onChange={e => onChange(e)}></input>
           <button onClick={e => createPlayer(e)}> Crear usuario</button>
         </div>

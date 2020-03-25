@@ -52,7 +52,12 @@ body {
   font-size: 10rem;
   padding: 7% 0;
   color: white;
-  @include text-shadow()
+  @include text-shadow();
+
+  @media screen and (max-width: 600px) {
+    font-size: 7rem;
+    padding: 20% 0;
+  }
 }
 
 .new-game {
@@ -239,19 +244,23 @@ body {
         }
       }
     }
+  }
 
-    button {
-      background-color: rgba($color: $secondary-color, $alpha: 0.3);
-      border-radius: $border-radius;
-      font-size: 1.2rem;
-      font-family: $font-text;
-      border: none;
-      transition: all 0.4s ease-in-out;
+  input {
+    margin: 1rem 0;
+  }
 
-      &:hover {
-        background-color: rgba($color: $secondary-color, $alpha: 0.5);
-        cursor: pointer;
-      }
+  button {
+    background-color: rgba($color: $secondary-color, $alpha: 0.3);
+    border-radius: $border-radius;
+    font-size: 1.2rem;
+    font-family: $font-text;
+    border: none;
+    transition: all 0.4s ease-in-out;
+
+    &:hover {
+      background-color: rgba($color: $secondary-color, $alpha: 0.5);
+      cursor: pointer;
     }
   }
 }
@@ -328,4 +337,31 @@ input {
     border: 1px solid $secondary-color;
   }
 
+}
+
+.start-game {
+  label {
+    font-family: $font-text;
+    font-size: 1.5rem;
+    color: $pen-color;
+  }
+
+  input {
+    width: 5%;
+    border-radius: $border-thin;
+    padding: 10px;
+    margin-bottom: 2rem;
+    border: 1px solid darken($gray, 15);
+    @include gridBackground();
+    background-color: white;
+    font-family: $font-handwritten;
+    font-size: 18px;
+    text-align: center;
+    color: darken($color: $gray, $amount: 50);
+
+    &:focus {
+      outline: none;
+      border: 1px solid $secondary-color;
+    }
+  }
 }

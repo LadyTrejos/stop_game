@@ -38,14 +38,14 @@ function App() {
   const [temporalGameId, setTemporalGameId] = useState(null);
   const [active, setActive] = useState(false);
   const [visibleModal, setVisibleModal] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
   const [numberOfPlayers, setNumberOfPlayers] = useState(null);
-  let numOfPlayers = null;
+  let tempNumOfPlayers = null;
 
   const [InsertGame] = useMutation(INSERT_GAME);
-  const { loading, error, data } = useSubscription(GET_LAST_GAME);
+  const { loading, data } = useSubscription(GET_LAST_GAME);
 
   const prevGameIdRef = useRef();
+  const prevGameId = prevGameIdRef.current;
 
   useEffect(() => {
     if (!loading) {
@@ -53,9 +53,9 @@ function App() {
     }
   });
 
-  const prevGameId = prevGameIdRef.current;
-
   if (!loading) {
+    // Should activate game ?
+    // If useEffect() detects a change on DB, activates a game
     if (temporalGameId !== prevGameId) {
       setTemporalGameId(prevGameId);
     }
@@ -68,7 +68,7 @@ function App() {
     }
   }
 
-  function makeid(length = 1) {
+  function chooseLetter(length = 1) {
     var result = "";
     var characters = "ABCDEFGHIJKLMNOPQRSTUVYZ";
     var charactersLength = characters.length;
@@ -81,10 +81,14 @@ function App() {
   function newGame() {
     const pattern = RegExp("^[2-9]{1}$");
 
-    if (pattern.test(numOfPlayers)) {
+    if (pattern.test(tempNumOfPlayers)) {
       InsertGame({
-        variables: { letter: makeid(), number_of_players: numOfPlayers }
+        variables: {
+          letter: chooseLetter(),
+          number_of_players: tempNumOfPlayers
+        }
       }).then(res => {
+        // Create a new game
         setGameID(res.data.insert_games.returning[0].id);
         setGameLetter(res.data.insert_games.returning[0].letter);
         setNumberOfPlayers(
@@ -95,7 +99,7 @@ function App() {
       setActive(true);
       showModal();
     } else {
-      alert("Ingresa solo un número de un dígito mayor o igual a 2");
+      alert("Cantidad mínima de jugadores: 2. Máximo: 9");
     }
   }
 
@@ -115,11 +119,11 @@ function App() {
   function onChange(e) {
     const pattern = RegExp("^[2-9]{1}$");
     if (e.target.value.length > 1) {
-      e.target.value.slice(0, 1);
+      e.target.value = e.target.value.slice(0, 1);
     }
 
     if (pattern.test(e.target.value)) {
-      numOfPlayers = e.target.value;
+      tempNumOfPlayers = e.target.value;
     }
   }
 
@@ -151,12 +155,11 @@ function App() {
       ) : (
         <React.Fragment>
           <div className="stop-title">Stop!</div>
-          <div style={{ paddingBottom: "30px" }}>
+          <div className="start-game">
             <label>Cantidad de jugadores: </label>
             <input
               type="number"
               onChange={e => onChange(e)}
-              style={{ height: "30px", width: "30px", fontSize: "20px" }}
               max={9}
               min={2}
             ></input>
@@ -165,9 +168,6 @@ function App() {
           <button onClick={() => newGame()} className="new-game">
             Nueva partida
           </button>
-          <div style={{ color: "#f00" }}>
-            {errorMessage ? errorMessage : null}
-          </div>
         </React.Fragment>
       )}
     </div>

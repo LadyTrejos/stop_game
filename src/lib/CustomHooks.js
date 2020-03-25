@@ -1,6 +1,6 @@
 import { useState } from "react";
 import gql from "graphql-tag";
-import { useSubscription, useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 
 const INSERT_STOP = gql`
   mutation InsertStop(
