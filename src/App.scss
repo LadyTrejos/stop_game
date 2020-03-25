@@ -42,7 +42,7 @@ body {
 body {
   background-color: $primary-color;
   text-align: center;
-  display: flex;
+  // display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -50,7 +50,7 @@ body {
 .stop-title {
   font-family: $font-title;
   font-size: 10rem;
-  padding: 0 0 20% 0;
+  padding: 7% 0;
   color: white;
   @include text-shadow()
 }
@@ -70,9 +70,9 @@ body {
   @include border(1px);
   border-radius: $border-radius;
   padding: 2rem 2rem 1.2rem;
-  margin: 20px;
   position: relative;
-  min-height: 250px;
+  min-height: 200px;
+  width: 70%;
   @include gridBackground();
 
   &:before,
@@ -97,7 +97,7 @@ body {
   }
 
   .hole-top {
-    top: 10%;
+    top: 20%;
     left: 30px;
   }
 
@@ -107,7 +107,7 @@ body {
   }
 
   .hole-bottom {
-    bottom: 10%;
+    bottom: 20%;
     left: 30px;
   }
 
@@ -128,10 +128,8 @@ body {
 }
 
 .table {
-  display: table;
-  width: 100%;
-  margin: 0 auto;
-  border-spacing: 2em 0.5em;
+  display: grid;
+  grid-template-columns: auto auto auto;
 
   label {
     font-family: $font-text;
@@ -143,34 +141,6 @@ body {
   }
 }
 
-.row {
-  display: table-row;
-  text-align: center;
-
-
-  input {
-    border-radius: $border-thin;
-    padding: 10px;
-    border: 1px solid darken($gray, 15);
-    background-color: transparent;
-    font-family: $font-handwritten;
-    font-size: 18px;
-    text-align: center;
-    letter-spacing: 1px;
-
-    color: darken($color: $gray, $amount: 50);
-
-    &:focus {
-      outline: none;
-      border: 1px solid $secondary-color;
-    }
-
-  }
-}
-
-.cell {
-  display: table-cell;
-}
 
 .stop-button {
   width: 20%;
@@ -223,6 +193,7 @@ body {
 }
 
 .players-card {
+  margin: 5vh auto;
   padding: 1rem;
   width: 600px;
   background: white;
@@ -319,4 +290,42 @@ body {
 
 .flip-card-back {
   transform: rotateY(180deg);
+}
+
+.col {
+  width: 20%;
+  display: inline-grid;
+  vertical-align: top;
+  margin: 10px;
+
+  @media screen and (max-width: 500px) {
+    width: 85%;
+    margin-top: 0;
+    margin-left: 40px;
+  }
+
+  @media screen and (min-width: 600px) and (max-width: 940px) {
+    width: 40%;
+    margin-top: 0;
+    margin-left: 40px;
+  }
+}
+
+input {
+  border-radius: $border-thin;
+  padding: 10px;
+  border: 1px solid darken($gray, 15);
+  background-color: transparent;
+  font-family: $font-handwritten;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 1px;
+  width: 90%;
+  color: darken($color: $gray, $amount: 50);
+
+  &:focus {
+    outline: none;
+    border: 1px solid $secondary-color;
+  }
+
 }

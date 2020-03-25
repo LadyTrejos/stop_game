@@ -190,23 +190,18 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
   return (
     <React.Fragment>
       <form
-        className="table"
         onSubmit={e => handleSubmit(e, inputs, disableButton)}
         autoComplete="off"
       >
         <div style={{ paddingTop: "50px" }}>
           Letra: {visibleLetter ? gameLetter : ""}
         </div>
-        <div className="card">
+
+        <div className="card table">
           <div>{formError}</div>
-          <div className="row">
-            <label className="cell">Nombre</label>
-            <label className="cell">Apellido</label>
-            <label className="cell">Ciudad</label>
-            <label className="cell">País</label>
-          </div>
-          <div className="row">
-            <div className="cell">
+          <div>
+            <div className="col">
+              <label>Nombre</label>
               <input
                 name="nombre"
                 type="text"
@@ -215,7 +210,8 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
                 disabled={disabledInput}
               />
             </div>
-            <div className="cell">
+            <div className="col">
+              <label>Apellido</label>
               <input
                 name="apellido"
                 type="text"
@@ -224,7 +220,8 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
                 disabled={disabledInput}
               />
             </div>
-            <div className="cell">
+            <div className="col">
+              <label>Ciudad</label>
               <input
                 name="ciudad"
                 type="text"
@@ -233,7 +230,8 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
                 disabled={disabledInput}
               />
             </div>
-            <div className="cell">
+            <div className="col">
+              <label>País</label>
               <input
                 name="pais"
                 type="text"
@@ -242,16 +240,8 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
                 disabled={disabledInput}
               />
             </div>
-          </div>
-          <br />
-          <div className="row">
-            <label className="cell">Animal</label>
-            <label className="cell">Fruta</label>
-            <label className="cell">Color</label>
-            <label className="cell">Cosa</label>
-          </div>
-          <div className="row">
-            <div className="cell">
+            <div className="col">
+              <label>Animal</label>
               <input
                 name="animal"
                 type="text"
@@ -260,7 +250,8 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
                 disabled={disabledInput}
               />
             </div>
-            <div className="cell">
+            <div className="col">
+              <label>Fruta</label>
               <input
                 name="fruta"
                 type="text"
@@ -269,7 +260,8 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
                 disabled={disabledInput}
               />
             </div>
-            <div className="cell">
+            <div className="col">
+              <label>Color</label>
               <input
                 name="color"
                 type="text"
@@ -278,7 +270,8 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
                 disabled={disabledInput}
               />
             </div>
-            <div className="cell">
+            <div className="col">
+              <label>Cosa</label>
               <input
                 name="cosa"
                 type="text"
@@ -289,7 +282,7 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
             </div>
           </div>
           <div className="hole hole-top"></div>
-          <div className="hole hole-middle"></div>
+          {/* <div className="hole hole-middle"></div> */}
           <div className="hole hole-bottom"></div>
         </div>
         <button

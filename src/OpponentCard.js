@@ -37,26 +37,21 @@ export default function MyCard({ currentPlayer, game }) {
     console.log("newData: ", newData);
   }
   return (
-    <div className="table">
+    <div>
       <div className={`flip-card ${newData ? "flip" : ""}`}>
         <div className="flip-card-inner">
           <div className="flip-card-front">
-            <div className="card">
+            <div className="card table">
               Jugando...<div className="hole hole-top-right"></div>
               <div className="hole hole-middle-right"></div>
               <div className="hole hole-bottom-right"></div>
             </div>
           </div>
           <div className={"flip-card-back"}>
-            <div className="card">
-              <div className="row">
-                <label className="cell">Nombre</label>
-                <label className="cell">Apellido</label>
-                <label className="cell">Ciudad</label>
-                <label className="cell">País</label>
-              </div>
-              <div className="row">
-                <div className="cell">
+            <div className="card table">
+              <div>
+                <div className="col">
+                  <label>Nombre</label>
                   <input
                     id="nombre"
                     type="text"
@@ -64,7 +59,8 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
-                <div className="cell">
+                <div className="col">
+                  <label>Apellido</label>
                   <input
                     id="apellido"
                     type="text"
@@ -72,7 +68,8 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
-                <div className="cell">
+                <div className="col">
+                  <label>Ciudad</label>
                   <input
                     id="ciudad"
                     type="text"
@@ -80,7 +77,8 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
-                <div className="cell">
+                <div className="col">
+                  <label>País</label>
                   <input
                     id="pais"
                     type="text"
@@ -88,16 +86,8 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
-              </div>
-              <br />
-              <div className="row">
-                <label className="cell">Animal</label>
-                <label className="cell">Fruta</label>
-                <label className="cell">Color</label>
-                <label className="cell">Cosa</label>
-              </div>
-              <div className="row">
-                <div className="cell">
+                <div className="col">
+                  <label>Animal</label>
                   <input
                     id="animal"
                     type="text"
@@ -105,7 +95,8 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
-                <div className="cell">
+                <div className="col">
+                  <label>Fruta</label>
                   <input
                     id="fruta"
                     type="text"
@@ -113,7 +104,8 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
-                <div className="cell">
+                <div className="col">
+                  <label>Color</label>
                   <input
                     id="color"
                     type="text"
@@ -121,7 +113,8 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
-                <div className="cell">
+                <div className="col">
+                  <label>Cosa</label>
                   <input
                     id="cosa"
                     type="text"
@@ -129,10 +122,10 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
+                <div className="hole hole-top"></div>
+                <div className="hole hole-middle"></div>
+                <div className="hole hole-bottom"></div>
               </div>
-              <div className="hole hole-top"></div>
-              <div className="hole hole-middle"></div>
-              <div className="hole hole-bottom"></div>
             </div>
           </div>
         </div>
