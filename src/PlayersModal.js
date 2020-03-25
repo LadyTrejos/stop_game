@@ -28,15 +28,19 @@ const PlayersModal = props => {
   const [getAvailablePlayers, { called, loading, data }] = useLazyQuery(
     GET_PLAYERS
   );
+  let playersOnTheGame = [];
 
   const playersOn = useSubscription(GET_PLAYERS_ON, {
     variables: { game_id: props.gameID },
     onSubscriptionData: ({ subscriptionData }) => {
-      const playersOnTheGame = subscriptionData.data.games_players.map(
+      playersOnTheGame = subscriptionData.data.games_players.map(
         player => player.player_id
       );
       getAvailablePlayers({
-        variables: { player_id: playersOnTheGame, limit: props.numberOfPlayers }
+        variables: {
+          player_id: playersOnTheGame,
+          limit: props.numberOfPlayers - playersOnTheGame.length
+        }
       });
       setPlayerChosen(null);
     }

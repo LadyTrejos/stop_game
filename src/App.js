@@ -39,7 +39,7 @@ function App() {
   const [visibleModal, setVisibleModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [numberOfPlayers, setNumberOfPlayers] = useState(null);
-  let numOfPlayers = 2;
+  let numOfPlayers = null;
 
   const [InsertGame] = useMutation(INSERT_GAME);
   const { loading, error, data } = useSubscription(GET_LAST_GAME);

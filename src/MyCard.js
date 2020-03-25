@@ -74,7 +74,12 @@ const GET_GAME_PLAYER = gql`
   }
 `;
 
-export default function MyCard({ currentPlayer, game, gameLetter }) {
+export default function MyCard({
+  currentPlayer,
+  game,
+  gameLetter,
+  numberOfPlayers
+}) {
   const [insertGame] = useMutation(INSERT_STOP);
   const [insertGamePlayer] = useMutation(INSERT_GAME_PLAYER);
 
@@ -89,6 +94,9 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
   const [isTheEnd, setIsTheEnd] = useState(false);
   const [isReady, setIsReady] = useState(false);
   // const [visibleLetter, setVisibleLetter] = useState(false);
+  const { loading, error, data = {} } = useSubscription(GET_POST, {
+    variables: { game_id: gameID, player_id: playerID }
+  });
 
   let visibleLetter = false;
 
@@ -129,7 +137,7 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
 
   if (!getGamePlayer.loading) {
     //si solo hay un jugador desabilita todos los campos
-    if (getGamePlayer.data.games_players.length === 1) {
+    if (getGamePlayer.data.games_players.length < numberOfPlayers) {
       if (!disabled && !disabledInput) {
         setDisabled(true);
         setDisabledInput(true);
@@ -138,17 +146,12 @@ export default function MyCard({ currentPlayer, game, gameLetter }) {
       //cuando hay más de un jugador, todo se habilita para que empiece el juego
       visibleLetter = true;
       if (disabled && disabledInput && !isReady) {
-        console.log("entra a cambiar valores");
         setDisabled(false);
         setDisabledInput(false);
         setIsReady(true);
       }
     }
   }
-
-  const { loading, error, data = {} } = useSubscription(GET_POST, {
-    variables: { game_id: gameID, player_id: playerID }
-  });
 
   if (!loading) {
     // Si el otro jugador da stop, deshabilita mis campos
