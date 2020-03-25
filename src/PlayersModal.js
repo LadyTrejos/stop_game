@@ -3,8 +3,8 @@ import gql from "graphql-tag";
 import { useSubscription, useLazyQuery, useQuery } from "@apollo/react-hooks";
 
 const GET_PLAYERS = gql`
-  query GetPlayers($player_id: [Int!]) {
-    players(where: { id: { _nin: $player_id } }) {
+  query GetPlayers($player_id: [Int!], $limit: Int!) {
+    players(where: { id: { _nin: $player_id } }, limit: $limit) {
       id
       nombre
     }
@@ -35,7 +35,9 @@ const PlayersModal = props => {
       const playersOnTheGame = subscriptionData.data.games_players.map(
         player => player.player_id
       );
-      getAvailablePlayers({ variables: { player_id: playersOnTheGame } });
+      getAvailablePlayers({
+        variables: { player_id: playersOnTheGame, limit: props.numberOfPlayers }
+      });
       setPlayerChosen(null);
     }
   });

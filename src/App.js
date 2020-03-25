@@ -39,7 +39,7 @@ function App() {
   const [visibleModal, setVisibleModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [numberOfPlayers, setNumberOfPlayers] = useState(null);
-  let numOfPlayers = null;
+  let numOfPlayers = 2;
 
   const [InsertGame] = useMutation(INSERT_GAME);
   const { loading, error, data } = useSubscription(GET_LAST_GAME);
@@ -59,7 +59,6 @@ function App() {
       setTemporalGameId(prevGameId);
     }
     if (typeof temporalGameId == "number" && !active) {
-      console.log("--> ", data.games[0]);
       setGameID(data.games[0].id);
       setGameLetter(data.games[0].letter);
       setNumberOfPlayers(data.games[0].number_of_players);
@@ -80,7 +79,7 @@ function App() {
 
   function newGame() {
     console.log("number of players: ", numberOfPlayers);
-    const pattern = RegExp("^[0-9]{1}$");
+    const pattern = RegExp("^[2-9]{1}$");
 
     if (pattern.test(numOfPlayers)) {
       console.log("correcto");
@@ -100,7 +99,7 @@ function App() {
       showModal();
     } else {
       console.log("incorrecto");
-      alert("Ingresa solo un número");
+      alert("Ingresa solo un número de un dígito mayor o igual a 2");
     }
   }
 
@@ -117,7 +116,17 @@ function App() {
   }
 
   function onChange(e) {
-    numOfPlayers = e.target.value;
+    const pattern = RegExp("^[2-9]{1}$");
+    if (e.target.value.length > 1) {
+      e.target.value.slice(0, 1);
+    }
+
+    if (pattern.test(e.target.value)) {
+      numOfPlayers = e.target.value;
+      console.log("cumplió ", numOfPlayers);
+    }
+
+    console.log("numOfPlayers: ", numOfPlayers);
   }
 
   console.log("game_id app: ", gameID);
@@ -154,6 +163,8 @@ function App() {
               type="number"
               onChange={e => onChange(e)}
               style={{ height: "30px", width: "30px", fontSize: "20px" }}
+              max={9}
+              min={2}
             ></input>
           </div>
 
