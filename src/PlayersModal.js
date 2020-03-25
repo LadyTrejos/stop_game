@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import gql from "graphql-tag";
-import { useMutation } from "@apollo/react-hooks";
+import { useSubscription, useMutation } from "@apollo/react-hooks";
 
 const GET_PLAYERS_ON = gql`
   subscription GetPlayerOn($game_id: Int!) {
@@ -27,12 +27,10 @@ const PlayersModal = props => {
   let playerName = null;
   const [insertPlayer] = useMutation(INSERT_PLAYER);
 
-  let playersOnTheGame = [];
-
   const playersOn = useSubscription(GET_PLAYERS_ON, {
     variables: { game_id: props.gameID },
     onSubscriptionData: ({ subscriptionData }) => {
-      playersOnTheGame = subscriptionData.data.games_players.map(
+      let playersOnTheGame = subscriptionData.data.games_players.map(
         player => player.player_id
       );
 
@@ -73,10 +71,15 @@ const PlayersModal = props => {
       {visible ? (
         <div className="players-card">
           <h1>Elige tu nombre de usuario</h1>
-          <span>{`Total jugadores: ${props.numberOfPlayers}`}</span>
-          <input type="text" onChange={e => onChange(e)}></input>
+          <span>{`Total jugadores en la partida: ${
+            playersOn.data ? playersOn.data.games_players.length : 0
+          }/${props.numberOfPlayers}`}</span>
+          <input
+            type="text"
+            onChange={e => onChange(e)}
+            placeholder="Nombre de usuario"
+          ></input>
           <button onClick={e => createPlayer(e)} disabled={disabled}>
-            {" "}
             Crear usuario
           </button>
         </div>

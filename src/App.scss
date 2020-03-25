@@ -198,9 +198,18 @@ body {
 }
 
 .players-card {
-  margin: 5vh auto;
+  width: 40%;
+  height: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  overflow: auto;
+  margin: auto;
   padding: 1rem;
-  width: 600px;
+
   background: white;
   border: 1px solid #ccc;
   border-radius: $border-radius;
@@ -212,6 +221,7 @@ body {
 
   h1 {
     font-family: $font-text;
+    color: $pen-color;
   }
 
   ul {
@@ -246,8 +256,12 @@ body {
     }
   }
 
+  span {
+    font-family: $font-text;
+  }
+
   input {
-    margin: 1rem 0;
+    margin: 10% 0 5% 0;
   }
 
   button {
