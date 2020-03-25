@@ -54,7 +54,7 @@ const PlayersModal = props => {
     <React.Fragment>
       {visible ? (
         <div className="players-card">
-          <h1>Elige un jugador</h1>
+          <h1>Elige un jugador {props.numberOfPlayers}</h1>
           <ul>
             {PLAYERS.map(player => (
               <li
