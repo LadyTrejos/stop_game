@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import gql from "graphql-tag";
-import { useSubscription, useMutation } from "@apollo/react-hooks";
+import { useMutation, useSubscription } from "@apollo/react-hooks";
 
 const GET_PLAYERS_ON = gql`
   subscription GetPlayerOn($game_id: Int!) {
