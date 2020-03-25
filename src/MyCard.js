@@ -104,6 +104,7 @@ export default function MyCard({
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [isTheEnd, setIsTheEnd] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const [bloqueo, setBloqueo] = useState(false);
 
   // const [visibleLetter, setVisibleLetter] = useState(false);
   const { loading, error, data = {} } = useSubscription(GET_POST, {
@@ -155,36 +156,48 @@ export default function MyCard({
     }
   }
   if (!getGamePlayer.loading) {
-    let bloqueo = false;
     //si solo hay un jugador desabilita todos los campos
     if (getGamePlayer.data.games_players.length < numberOfPlayers) {
-      bloqueo = true;
+      if (!bloqueo) {
+        setBloqueo(true);
+      }
+
       if (!disabled && !disabledInput) {
         setDisabled(true);
         setDisabledInput(true);
       }
     } else {
       //cuando los jugadores se completan, todo se habilita para que empiece el juego
-      visibleLetter = true;
 
       if (getGamePlayer.data.games_players.length === numberOfPlayers) {
+        console.log("se llenó el tope de jugadores");
+        visibleLetter = true;
         if (disabled && disabledInput && !isReady) {
           setDisabled(false);
           setDisabledInput(false);
           setIsReady(true);
         }
-        bloqueo = true;
-        wait(1);
-      }
-      console.log("bloqueo: ", bloqueo);
-      if (!bloqueo) {
-        //si bloqueo es falso, quiere decir que el jugador no se registró cuando aún habían cupos disponibles,
-        //así que se borra de la partida y se dirige a la pádina de inicio
-        deleteGameOnPlayer({ variables: { player_id: currentPlayer } });
-        window.location.reload();
-        alert(
-          "Lo sentimos, hubo un jugador que se registró antes que tú y ocupó el tope de la partida"
-        );
+        if (!bloqueo) {
+          setBloqueo(true);
+        }
+      } else {
+        wait(2);
+        visibleLetter = true;
+        console.log("bloqueo: ", bloqueo);
+        if (disabled && disabledInput && !isReady) {
+          setDisabled(false);
+          setDisabledInput(false);
+          setIsReady(true);
+        }
+        if (!bloqueo) {
+          //si bloqueo es falso, quiere decir que el jugador no se registró cuando aún habían cupos disponibles,
+          //así que se borra de la partida y se dirige a la página de inicio
+          deleteGameOnPlayer({ variables: { player_id: currentPlayer } });
+          window.location.reload();
+          alert(
+            "Lo sentimos, hubo un jugador que se registró antes que tú y ocupó el tope de la partida"
+          );
+        }
       }
     }
   }
