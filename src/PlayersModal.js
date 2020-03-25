@@ -3,8 +3,8 @@ import gql from "graphql-tag";
 import { useSubscription, useLazyQuery, useQuery } from "@apollo/react-hooks";
 
 const GET_PLAYERS = gql`
-  query GetPlayers($player_id: [Int!]) {
-    players(where: { id: { _nin: $player_id } }) {
+  query GetPlayers($player_id: [Int!], $limit: Int!) {
+    players(where: { id: { _nin: $player_id } }, limit: $limit) {
       id
       nombre
     }
@@ -28,14 +28,20 @@ const PlayersModal = props => {
   const [getAvailablePlayers, { called, loading, data }] = useLazyQuery(
     GET_PLAYERS
   );
+  let playersOnTheGame = [];
 
   const playersOn = useSubscription(GET_PLAYERS_ON, {
     variables: { game_id: props.gameID },
     onSubscriptionData: ({ subscriptionData }) => {
-      const playersOnTheGame = subscriptionData.data.games_players.map(
+      playersOnTheGame = subscriptionData.data.games_players.map(
         player => player.player_id
       );
-      getAvailablePlayers({ variables: { player_id: playersOnTheGame } });
+      getAvailablePlayers({
+        variables: {
+          player_id: playersOnTheGame,
+          limit: props.numberOfPlayers - playersOnTheGame.length
+        }
+      });
       setPlayerChosen(null);
     }
   });
@@ -54,7 +60,7 @@ const PlayersModal = props => {
     <React.Fragment>
       {visible ? (
         <div className="players-card">
-          <h1>Elige un jugador</h1>
+          <h1>Elige un jugador {props.numberOfPlayers}</h1>
           <ul>
             {PLAYERS.map(player => (
               <li
