@@ -43,6 +43,17 @@ export default function OpponentCard({ currentPlayer, game }) {
     }
   });
 
+  function total(scores) {
+    let score = Object.entries(scores);
+    let total = 0;
+    score.map(item => {
+      if (typeof item[1] === "number") {
+        total = total + item[1];
+      }
+    });
+    return total;
+  }
+
   function renderData() {
     const listData = allData.map((newData, idx) => (
       <div className="card" key={idx}>
@@ -145,6 +156,12 @@ export default function OpponentCard({ currentPlayer, game }) {
               }
               readOnly
             ></input>
+          </div>
+          <div>
+            Total:
+            {newData["stop_scores"].length > 0
+              ? total(newData["stop_scores"][0])
+              : " ..."}
           </div>
           <div className="hole hole-top"></div>
           <div className="hole hole-middle"></div>
