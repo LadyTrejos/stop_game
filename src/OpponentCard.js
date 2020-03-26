@@ -158,7 +158,7 @@ export default function OpponentCard({ currentPlayer, game }) {
             ></input>
           </div>
           <div>
-            Total:
+            Total:{" "}
             {newData["stop_scores"].length > 0
               ? total(newData["stop_scores"][0])
               : " ..."}
