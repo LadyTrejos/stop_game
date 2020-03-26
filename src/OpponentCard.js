@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSubscription, useMutation } from "@apollo/react-hooks";
+import { useSubscription } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 
 const GET_POST = gql`
@@ -19,22 +19,65 @@ const GET_POST = gql`
   }
 `;
 
-export default function MyCard({ currentPlayer, game }) {
-  const [empty, setEmpty] = useState(true);
-  let newData = null;
+export default function OpponentCard({ currentPlayer, game }) {
+  const [allData, setAllData] = useState([]);
 
   const { loading, error, data } = useSubscription(GET_POST, {
-    variables: { game_id: game, player_id: currentPlayer }
+    variables: { game_id: game, player_id: currentPlayer },
+    onSubscriptionData: ({ subscriptionData }) => {
+      setAllData(subscriptionData.data.stop);
+    }
   });
 
-  if (!loading) {
-    if (data.stop.length > 0) {
-      newData = Object.entries(data.stop[0]);
-    }
+  function renderData() {
+    const listData = allData.map((newData, idx) => (
+      <div className="card" key={idx}>
+        <div className="table">
+          <div className="col">
+            <label>Nombre</label>
+            <input type="text" value={newData["nombre"]} disabled></input>
+          </div>
+          <div className="col">
+            <label>Apellido</label>
+            <input type="text" value={newData["apellido"]} disabled></input>
+          </div>
+          <div className="col">
+            <label>Ciudad</label>
+            <input type="text" value={newData["ciudad"]} disabled></input>
+          </div>
+          <div className="col">
+            <label>País</label>
+            <input type="text" value={newData["pais"]} disabled></input>
+          </div>
+          <div className="col">
+            <label>Animal</label>
+            <input type="text" value={newData["animal"]} disabled></input>
+          </div>
+          <div className="col">
+            <label>Fruta</label>
+            <input type="text" value={newData["fruta"]} disabled></input>
+          </div>
+          <div className="col">
+            <label>Color</label>
+            <input type="text" value={newData["color"]} disabled></input>
+          </div>
+          <div className="col">
+            <label>Cosa</label>
+            <input type="text" value={newData["cosa"]} disabled></input>
+          </div>
+          <div className="hole hole-top"></div>
+          <div className="hole hole-middle"></div>
+          <div className="hole hole-bottom"></div>
+        </div>
+      </div>
+    ));
+
+    return listData;
   }
+  console.log("allData: ", allData);
   return (
     <div>
-      <div className={`flip-card ${newData ? "flip" : ""}`}>
+      <div className={`flip-card ${allData.length > 0 ? "flip" : ""}`}>
         <div className="flip-card-inner">
           <div className="flip-card-front">
             <div className="card">
@@ -44,85 +87,7 @@ export default function MyCard({ currentPlayer, game }) {
             </div>
           </div>
           <div className={"flip-card-back"}>
-            <div className="card">
-              <div className="table">
-                <div>
-                  <label>Nombre</label>
-                  <input
-                    id="nombre"
-                    type="text"
-                    defaultValue={newData ? newData[6][1] : ""}
-                    disabled
-                  ></input>
-                </div>
-                <div>
-                  <label>Apellido</label>
-                  <input
-                    id="apellido"
-                    type="text"
-                    defaultValue={newData ? newData[1][1] : ""}
-                    disabled
-                  ></input>
-                </div>
-                <div>
-                  <label>Ciudad</label>
-                  <input
-                    id="ciudad"
-                    type="text"
-                    defaultValue={newData ? newData[2][1] : ""}
-                    disabled
-                  ></input>
-                </div>
-                <div>
-                  <label>País</label>
-                  <input
-                    id="pais"
-                    type="text"
-                    defaultValue={newData ? newData[7][1] : ""}
-                    disabled
-                  ></input>
-                </div>
-                <div>
-                  <label>Animal</label>
-                  <input
-                    id="animal"
-                    type="text"
-                    defaultValue={newData ? newData[0][1] : ""}
-                    disabled
-                  ></input>
-                </div>
-                <div>
-                  <label>Fruta</label>
-                  <input
-                    id="fruta"
-                    type="text"
-                    defaultValue={newData ? newData[5][1] : ""}
-                    disabled
-                  ></input>
-                </div>
-                <div>
-                  <label>Color</label>
-                  <input
-                    id="color"
-                    type="text"
-                    defaultValue={newData ? newData[3][1] : ""}
-                    disabled
-                  ></input>
-                </div>
-                <div>
-                  <label>Cosa</label>
-                  <input
-                    id="cosa"
-                    type="text"
-                    defaultValue={newData ? newData[4][1] : ""}
-                    disabled
-                  ></input>
-                </div>
-                <div className="hole hole-top"></div>
-                <div className="hole hole-middle"></div>
-                <div className="hole hole-bottom"></div>
-              </div>
-            </div>
+            {allData.length > 0 ? renderData() : null}
           </div>
         </div>
       </div>

@@ -45,7 +45,6 @@ const PlayersModal = props => {
   });
 
   function createPlayer(e, playerName) {
-    console.log("playerName: ", playerName);
     if (playerName.trim() === "") {
       alert("El nombre de usuario no puede ser vacío.");
     } else {
@@ -64,7 +63,6 @@ const PlayersModal = props => {
   }
 
   function onChange(e) {
-    console.log("value: ", e.target.value);
     setPlayerName(e.target.value);
   }
 

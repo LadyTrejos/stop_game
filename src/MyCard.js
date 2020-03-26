@@ -104,6 +104,7 @@ export default function MyCard({
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [isTheEnd, setIsTheEnd] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const [bloqueo, setBloqueo] = useState(false);
 
   // const [visibleLetter, setVisibleLetter] = useState(false);
   const { loading, error, data = {} } = useSubscription(GET_POST, {
@@ -155,31 +156,44 @@ export default function MyCard({
     }
   }
   if (!getGamePlayer.loading) {
-    let bloqueo = false;
     //si solo hay un jugador desabilita todos los campos
     if (getGamePlayer.data.games_players.length < numberOfPlayers) {
-      bloqueo = true;
+      if (!bloqueo) {
+        setBloqueo(true);
+      }
+
       if (!disabled && !disabledInput) {
         setDisabled(true);
         setDisabledInput(true);
       }
     } else {
       //cuando los jugadores se completan, todo se habilita para que empiece el juego
-      visibleLetter = true;
-      showLetter();
 
-      if (disabled && disabledInput && !isReady) {
-        setDisabled(false);
-        setDisabledInput(false);
-        setIsReady(true);
-      }
-      bloqueo = true;
       if (getGamePlayer.data.games_players.length === numberOfPlayers) {
-        wait(1);
+        console.log("se llenó el tope de jugadores");
+        visibleLetter = true;
+        showLetter();
+        if (disabled && disabledInput && !isReady) {
+          setDisabled(false);
+          setDisabledInput(false);
+          setIsReady(true);
+        }
+        if (!bloqueo) {
+          setBloqueo(true);
+        }
+      } else {
+        wait(2);
+        visibleLetter = true;
+        showLetter();
         console.log("bloqueo: ", bloqueo);
+        if (disabled && disabledInput && !isReady) {
+          setDisabled(false);
+          setDisabledInput(false);
+          setIsReady(true);
+        }
         if (!bloqueo) {
           //si bloqueo es falso, quiere decir que el jugador no se registró cuando aún habían cupos disponibles,
-          //así que se borra de la partida y se dirige a la pádina de inicio
+          //así que se borra de la partida y se dirige a la página de inicio
           deleteGameOnPlayer({ variables: { player_id: currentPlayer } });
           window.location.reload();
           alert(
@@ -229,6 +243,7 @@ export default function MyCard({
 
   function showLetter() {
     var x = document.getElementById("snackbar");
+    console.log("x -->", x);
     x.className = "show";
     setTimeout(function() {
       x.className = x.className.replace("show", "");
@@ -243,9 +258,7 @@ export default function MyCard({
         onSubmit={e => handleSubmit(e, inputs, disableButton)}
         autoComplete="off"
       >
-        <div id="snackbar" className={visibleLetter ? "show" : ""}>
-          {`Letra: ${gameLetter}`}
-        </div>
+        <div id="snackbar">{`Letra: ${gameLetter}`}</div>
 
         <div className="card">
           <div>{formError}</div>

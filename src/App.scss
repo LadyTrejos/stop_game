@@ -99,10 +99,11 @@ body {
     margin: 0 50px;
 
     span {
-      font-family: $font-handwritten;
+      font-family: $font-text;
       font-size: 1.2rem;
       color: $secondary-color;
       margin-top: 10px;
+      letter-spacing: 1px;
     }
   }
 
