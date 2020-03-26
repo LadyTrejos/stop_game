@@ -92,6 +92,20 @@ body {
     width: 99.5%;
   }
 
+  .footer {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 50px;
+
+    span {
+      font-family: $font-handwritten;
+      font-size: 1.2rem;
+      color: $secondary-color;
+      margin-top: 10px;
+    }
+  }
+
   .hole {
     position: absolute;
     height: 25px;
@@ -99,6 +113,10 @@ body {
     background: $primary-color;
     border-radius: 50%;
     box-shadow: inset 0px 0px 2px 0px #888;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding-bottom: 3.2rem;
   }
 
   .hole-top {
@@ -134,7 +152,19 @@ body {
 
 .table {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto auto auto;
+  gap: 10px;
+  width: 92%;
+  margin-left: 8%;
+
+  @media screen and (max-width: 500px) {
+    grid-template-columns: auto;
+    margin-left: 15%;
+  }
+
+  @media screen and (min-width: 600px) and (max-width: 940px) {
+    grid-template-columns: auto auto;
+  }
 
   label {
     font-family: $font-text;
@@ -315,24 +345,6 @@ body {
   transform: rotateY(180deg);
 }
 
-.col {
-  width: 20%;
-  display: inline-grid;
-  vertical-align: top;
-  margin: 10px;
-
-  @media screen and (max-width: 500px) {
-    width: 85%;
-    margin-top: 0;
-    margin-left: 40px;
-  }
-
-  @media screen and (min-width: 600px) and (max-width: 940px) {
-    width: 40%;
-    margin-top: 0;
-    margin-left: 40px;
-  }
-}
 
 input {
   border-radius: $border-thin;
@@ -377,5 +389,77 @@ input {
       outline: none;
       border: 1px solid $secondary-color;
     }
+  }
+}
+
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -140px;
+  background-color: darken($color: $secondary-color, $amount: 20);
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  top: 150px;
+  font-size: 30px;
+  font-family: $font-text;
+  box-shadow: -5px 5px 15px gray;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {
+    top: 0;
+    opacity: 0;
+  }
+
+  to {
+    top: 150px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    top: 0;
+    opacity: 0;
+  }
+
+  to {
+    top: 150px;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeout {
+  from {
+    top: 150px;
+    opacity: 1;
+  }
+
+  to {
+    top: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    top: 150px;
+    opacity: 1;
+  }
+
+  to {
+    top: 0;
+    opacity: 0;
   }
 }

@@ -24,7 +24,7 @@ const INSERT_PLAYER = gql`
 const PlayersModal = props => {
   const { visible, closeModal } = props;
   const [disabled, setDisabled] = useState(false);
-  let playerName = null;
+  const [playerName, setPlayerName] = useState("");
   const [insertPlayer] = useMutation(INSERT_PLAYER);
 
   const playersOn = useSubscription(GET_PLAYERS_ON, {
@@ -44,7 +44,8 @@ const PlayersModal = props => {
     }
   });
 
-  function createPlayer(e) {
+  function createPlayer(e, playerName) {
+    console.log("playerName: ", playerName);
     if (playerName.trim() === "") {
       alert("El nombre de usuario no puede ser vacío.");
     } else {
@@ -63,7 +64,8 @@ const PlayersModal = props => {
   }
 
   function onChange(e) {
-    playerName = e.target.value;
+    console.log("value: ", e.target.value);
+    setPlayerName(e.target.value);
   }
 
   return (
@@ -79,7 +81,10 @@ const PlayersModal = props => {
             onChange={e => onChange(e)}
             placeholder="Nombre de usuario"
           ></input>
-          <button onClick={e => createPlayer(e)} disabled={disabled}>
+          <button
+            onClick={e => createPlayer(e, playerName)}
+            disabled={disabled}
+          >
             Crear usuario
           </button>
         </div>

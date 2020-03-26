@@ -166,25 +166,26 @@ export default function MyCard({
     } else {
       //cuando los jugadores se completan, todo se habilita para que empiece el juego
       visibleLetter = true;
+      showLetter();
 
-      if (getGamePlayer.data.games_players.length === numberOfPlayers) {
-        if (disabled && disabledInput && !isReady) {
-          setDisabled(false);
-          setDisabledInput(false);
-          setIsReady(true);
-        }
-        bloqueo = true;
-        wait(1);
+      if (disabled && disabledInput && !isReady) {
+        setDisabled(false);
+        setDisabledInput(false);
+        setIsReady(true);
       }
-      console.log("bloqueo: ", bloqueo);
-      if (!bloqueo) {
-        //si bloqueo es falso, quiere decir que el jugador no se registró cuando aún habían cupos disponibles,
-        //así que se borra de la partida y se dirige a la pádina de inicio
-        deleteGameOnPlayer({ variables: { player_id: currentPlayer } });
-        window.location.reload();
-        alert(
-          "Lo sentimos, hubo un jugador que se registró antes que tú y ocupó el tope de la partida"
-        );
+      bloqueo = true;
+      if (getGamePlayer.data.games_players.length === numberOfPlayers) {
+        wait(1);
+        console.log("bloqueo: ", bloqueo);
+        if (!bloqueo) {
+          //si bloqueo es falso, quiere decir que el jugador no se registró cuando aún habían cupos disponibles,
+          //así que se borra de la partida y se dirige a la pádina de inicio
+          deleteGameOnPlayer({ variables: { player_id: currentPlayer } });
+          window.location.reload();
+          alert(
+            "Lo sentimos, hubo un jugador que se registró antes que tú y ocupó el tope de la partida"
+          );
+        }
       }
     }
   }
@@ -226,21 +227,30 @@ export default function MyCard({
     setFormError(null);
   }
 
+  function showLetter() {
+    var x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(function() {
+      x.className = x.className.replace("show", "");
+    }, 3000);
+  }
+
+  console.log("visible letter: ", visibleLetter);
+
   return (
     <React.Fragment>
-      <div>{`${currentPlayerName}`}</div>
       <form
         onSubmit={e => handleSubmit(e, inputs, disableButton)}
         autoComplete="off"
       >
-        <div style={{ paddingTop: "50px" }}>
-          Letra: {visibleLetter ? gameLetter : ""}
+        <div id="snackbar" className={visibleLetter ? "show" : ""}>
+          {`Letra: ${gameLetter}`}
         </div>
 
-        <div className="card table">
+        <div className="card">
           <div>{formError}</div>
-          <div>
-            <div className="col">
+          <div className="table">
+            <div>
               <label>Nombre</label>
               <input
                 name="nombre"
@@ -250,7 +260,7 @@ export default function MyCard({
                 disabled={disabledInput}
               />
             </div>
-            <div className="col">
+            <div>
               <label>Apellido</label>
               <input
                 name="apellido"
@@ -260,7 +270,7 @@ export default function MyCard({
                 disabled={disabledInput}
               />
             </div>
-            <div className="col">
+            <div>
               <label>Ciudad</label>
               <input
                 name="ciudad"
@@ -270,7 +280,7 @@ export default function MyCard({
                 disabled={disabledInput}
               />
             </div>
-            <div className="col">
+            <div>
               <label>País</label>
               <input
                 name="pais"
@@ -280,7 +290,7 @@ export default function MyCard({
                 disabled={disabledInput}
               />
             </div>
-            <div className="col">
+            <div>
               <label>Animal</label>
               <input
                 name="animal"
@@ -290,7 +300,7 @@ export default function MyCard({
                 disabled={disabledInput}
               />
             </div>
-            <div className="col">
+            <div>
               <label>Fruta</label>
               <input
                 name="fruta"
@@ -300,7 +310,7 @@ export default function MyCard({
                 disabled={disabledInput}
               />
             </div>
-            <div className="col">
+            <div>
               <label>Color</label>
               <input
                 name="color"
@@ -310,7 +320,7 @@ export default function MyCard({
                 disabled={disabledInput}
               />
             </div>
-            <div className="col">
+            <div>
               <label>Cosa</label>
               <input
                 name="cosa"
@@ -324,6 +334,12 @@ export default function MyCard({
           <div className="hole hole-top"></div>
           {/* <div className="hole hole-middle"></div> */}
           <div className="hole hole-bottom"></div>
+          <div className="footer">
+            <span style={{ float: "left" }}>
+              {visibleLetter ? `Letra: ${gameLetter}` : " "}
+            </span>
+            <span style={{ float: "right" }}>{`${currentPlayerName}`}</span>
+          </div>
         </div>
         <button
           type="submit"

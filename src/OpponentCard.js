@@ -37,16 +37,16 @@ export default function MyCard({ currentPlayer, game }) {
       <div className={`flip-card ${newData ? "flip" : ""}`}>
         <div className="flip-card-inner">
           <div className="flip-card-front">
-            <div className="card table">
+            <div className="card">
               Jugando...<div className="hole hole-top-right"></div>
               <div className="hole hole-middle-right"></div>
               <div className="hole hole-bottom-right"></div>
             </div>
           </div>
           <div className={"flip-card-back"}>
-            <div className="card table">
-              <div>
-                <div className="col">
+            <div className="card">
+              <div className="table">
+                <div>
                   <label>Nombre</label>
                   <input
                     id="nombre"
@@ -55,7 +55,7 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
-                <div className="col">
+                <div>
                   <label>Apellido</label>
                   <input
                     id="apellido"
@@ -64,7 +64,7 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
-                <div className="col">
+                <div>
                   <label>Ciudad</label>
                   <input
                     id="ciudad"
@@ -73,7 +73,7 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
-                <div className="col">
+                <div>
                   <label>País</label>
                   <input
                     id="pais"
@@ -82,7 +82,7 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
-                <div className="col">
+                <div>
                   <label>Animal</label>
                   <input
                     id="animal"
@@ -91,7 +91,7 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
-                <div className="col">
+                <div>
                   <label>Fruta</label>
                   <input
                     id="fruta"
@@ -100,7 +100,7 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
-                <div className="col">
+                <div>
                   <label>Color</label>
                   <input
                     id="color"
@@ -109,7 +109,7 @@ export default function MyCard({ currentPlayer, game }) {
                     disabled
                   ></input>
                 </div>
-                <div className="col">
+                <div>
                   <label>Cosa</label>
                   <input
                     id="cosa"
