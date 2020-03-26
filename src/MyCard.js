@@ -100,6 +100,7 @@ export default function MyCard({
   const [isTheEnd, setIsTheEnd] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [visibleLetter, setVisibleLetter] = useState(false);
+  const [showLetter, setShowLetter] = useState(true);
 
   const [insertGame] = useMutation(INSERT_STOP);
   const [insertGamePlayer] = useMutation(INSERT_GAME_PLAYER);
@@ -142,22 +143,25 @@ export default function MyCard({
       }
     } else {
       //cuando los jugadores se completan, todo se habilita para que empiece el juego
-      if (playersList.data.games_players.length === numberOfPlayers) {
-        console.log("Todos los jugadores están listos.");
-        setVisibleLetter(true);
-        showLetter();
-
-        if (disabled && disabledInput && !isReady) {
-          setDisabled(false);
-          setDisabledInput(false);
-          setIsReady(true);
-        }
-      } else {
+      if (playersList.data.games_players.length >= numberOfPlayers) {
         // Cuando se supera la cantidad de jugadores permitidos
         const allowedPlayersArray = playersList.data.games_players
           .slice(0, numberOfPlayers)
           .map(player => player.player_id);
-        if (!allowedPlayersArray.includes(currentPlayer)) {
+        if (allowedPlayersArray.includes(currentPlayer)) {
+          console.log("Todos los jugadores están listos.");
+          if (!visibleLetter && showLetter) {
+            setVisibleLetter(true);
+            setShowLetter(false);
+            showLetterPopUp();
+          }
+
+          if (disabled && disabledInput && !isReady) {
+            setDisabled(false);
+            setDisabledInput(false);
+            setIsReady(true);
+          }
+        } else {
           if (disabled && disabledInput && !isReady) {
             setDisabled(false);
             setDisabledInput(false);
@@ -216,7 +220,7 @@ export default function MyCard({
     setFormError(null);
   }
 
-  function showLetter() {
+  function showLetterPopUp() {
     var x = document.getElementById("snackbar");
     console.log("x -->", x);
     x.className = "show";
