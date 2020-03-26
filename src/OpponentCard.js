@@ -15,6 +15,20 @@ const GET_POST = gql`
       fruta
       nombre
       pais
+      id
+      player {
+        nombre
+      }
+      stop_scores {
+        animal
+        apellido
+        ciudad
+        color
+        cosa
+        fruta
+        nombre
+        pais
+      }
     }
   }
 `;
@@ -32,38 +46,105 @@ export default function OpponentCard({ currentPlayer, game }) {
   function renderData() {
     const listData = allData.map((newData, idx) => (
       <div className="card" key={idx}>
+        <div className="footer">
+          <span>Respuestas de {newData["player"]["nombre"]}</span>
+        </div>
         <div className="table">
           <div className="col">
             <label>Nombre</label>
             <input type="text" value={newData["nombre"]} disabled></input>
+            <input
+              value={
+                newData["stop_scores"].length > 0
+                  ? newData["stop_scores"][0]["nombre"]
+                  : "puntaje"
+              }
+              readOnly
+            ></input>
           </div>
           <div className="col">
             <label>Apellido</label>
             <input type="text" value={newData["apellido"]} disabled></input>
+            <input
+              value={
+                newData["stop_scores"].length > 0
+                  ? newData["stop_scores"][0]["apellido"]
+                  : "puntaje"
+              }
+              readOnly
+            ></input>
           </div>
           <div className="col">
             <label>Ciudad</label>
             <input type="text" value={newData["ciudad"]} disabled></input>
+            <input
+              value={
+                newData["stop_scores"].length > 0
+                  ? newData["stop_scores"][0]["ciudad"]
+                  : "puntaje"
+              }
+              readOnly
+            ></input>
           </div>
           <div className="col">
             <label>País</label>
             <input type="text" value={newData["pais"]} disabled></input>
+            <input
+              value={
+                newData["stop_scores"].length > 0
+                  ? newData["stop_scores"][0]["pais"]
+                  : "puntaje"
+              }
+              readOnly
+            ></input>
           </div>
           <div className="col">
             <label>Animal</label>
             <input type="text" value={newData["animal"]} disabled></input>
+            <input
+              value={
+                newData["stop_scores"].length > 0
+                  ? newData["stop_scores"][0]["animal"]
+                  : "puntaje"
+              }
+              readOnly
+            ></input>
           </div>
           <div className="col">
             <label>Fruta</label>
             <input type="text" value={newData["fruta"]} disabled></input>
+            <input
+              value={
+                newData["stop_scores"].length > 0
+                  ? newData["stop_scores"][0]["fruta"]
+                  : "puntaje"
+              }
+              readOnly
+            ></input>
           </div>
           <div className="col">
             <label>Color</label>
             <input type="text" value={newData["color"]} disabled></input>
+            <input
+              value={
+                newData["stop_scores"].length > 0
+                  ? newData["stop_scores"][0]["color"]
+                  : "puntaje"
+              }
+              readOnly
+            ></input>
           </div>
           <div className="col">
             <label>Cosa</label>
             <input type="text" value={newData["cosa"]} disabled></input>
+            <input
+              value={
+                newData["stop_scores"].length > 0
+                  ? newData["stop_scores"][0]["cosa"]
+                  : "puntaje"
+              }
+              readOnly
+            ></input>
           </div>
           <div className="hole hole-top"></div>
           <div className="hole hole-middle"></div>
