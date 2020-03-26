@@ -83,6 +83,7 @@ const DELETE_PLAYER_ON_GAME = gql`
     }
   }
 `;
+
 export default function MyCard({
   currentPlayer,
   currentPlayerName,
@@ -90,12 +91,6 @@ export default function MyCard({
   gameLetter,
   numberOfPlayers
 }) {
-  const [insertGame] = useMutation(INSERT_STOP);
-  const [insertGamePlayer] = useMutation(INSERT_GAME_PLAYER);
-  const [deleteGameOnPlayer] = useMutation(DELETE_PLAYER_ON_GAME);
-
-  const [gameID, setGameID] = useState(game);
-  const [playerID, setPlayerID] = useState(currentPlayer);
   const [formError, setFormError] = useState(null);
   const [disabled, setDisabled] = useState(true);
   const [disabledInput, setDisabledInput] = useState(true);
@@ -104,21 +99,14 @@ export default function MyCard({
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [isTheEnd, setIsTheEnd] = useState(false);
   const [isReady, setIsReady] = useState(false);
-  const [bloqueo, setBloqueo] = useState(false);
+  const [visibleLetter, setVisibleLetter] = useState(false);
 
-  // const [visibleLetter, setVisibleLetter] = useState(false);
-  const { loading, error, data = {} } = useSubscription(GET_POST, {
-    variables: { game_id: gameID, player_id: playerID }
+  const [insertGame] = useMutation(INSERT_STOP);
+  const [insertGamePlayer] = useMutation(INSERT_GAME_PLAYER);
+  const [deleteGameOnPlayer] = useMutation(DELETE_PLAYER_ON_GAME);
+  const { loading, data = {} } = useSubscription(GET_POST, {
+    variables: { game_id: game, player_id: currentPlayer }
   });
-
-  let visibleLetter = false;
-
-  function disableButton() {
-    //desabilita el botón de stop para que no se oprima varias veces y haga muchos insert
-    setDisabled(true);
-    setListening(false);
-  }
-
   const { inputs, handleInputChange, handleSubmit } = useStopForm(
     {
       nombre: "",
@@ -129,70 +117,54 @@ export default function MyCard({
       fruta: "",
       color: "",
       cosa: "",
-      game_id: gameID,
-      player_id: playerID
+      game_id: game,
+      player_id: currentPlayer
     },
     ({ err }) => setFormError(err)
   );
 
-  if (isFirstTime) {
-    //si es la primera vez que entra a la partida actual,
-    //registra el id del jugador con el id de la partida actual
-    setIsFirstTime(false);
-    insertGamePlayer({
-      variables: { game_id: game, player_id: currentPlayer }
-    });
-  }
-
   const getGamePlayer = useSubscription(GET_GAME_PLAYER, {
-    variables: { game_id: game }
+    variables: { game_id: game },
+    onSubscriptionData: ({ subscriptionData }) =>
+      checkNumOfPlayers(subscriptionData)
   });
 
-  function wait(ms) {
-    var start = new Date().getTime();
-    var end = start;
-    while (end < start + ms) {
-      end = new Date().getTime();
-    }
-  }
-  if (!getGamePlayer.loading) {
-    //si solo hay un jugador desabilita todos los campos
-    if (getGamePlayer.data.games_players.length < numberOfPlayers) {
-      if (!bloqueo) {
-        setBloqueo(true);
-      }
-
+  function checkNumOfPlayers(playersList) {
+    console.log(
+      "check num of players: ",
+      playersList.data.games_players.length,
+      numberOfPlayers
+    );
+    if (playersList.data.games_players.length < numberOfPlayers) {
       if (!disabled && !disabledInput) {
         setDisabled(true);
         setDisabledInput(true);
       }
     } else {
       //cuando los jugadores se completan, todo se habilita para que empiece el juego
-
-      if (getGamePlayer.data.games_players.length === numberOfPlayers) {
-        console.log("se llenó el tope de jugadores");
-        visibleLetter = true;
+      if (playersList.data.games_players.length === numberOfPlayers) {
+        console.log("Todos los jugadores están listos.");
+        setVisibleLetter(true);
         showLetter();
+
         if (disabled && disabledInput && !isReady) {
           setDisabled(false);
           setDisabledInput(false);
           setIsReady(true);
-        }
-        if (!bloqueo) {
-          setBloqueo(true);
         }
       } else {
-        wait(2);
-        visibleLetter = true;
-        showLetter();
-        console.log("bloqueo: ", bloqueo);
-        if (disabled && disabledInput && !isReady) {
-          setDisabled(false);
-          setDisabledInput(false);
-          setIsReady(true);
-        }
-        if (!bloqueo) {
-          //si bloqueo es falso, quiere decir que el jugador no se registró cuando aún habían cupos disponibles,
+        // Cuando se supera la cantidad de jugadores permitidos
+        const allowedPlayersArray = playersList.data.games_players
+          .slice(0, numberOfPlayers)
+          .map(player => player.player_id);
+        if (!allowedPlayersArray.includes(currentPlayer)) {
+          if (disabled && disabledInput && !isReady) {
+            setDisabled(false);
+            setDisabledInput(false);
+            setIsReady(true);
+          }
+
+          // El jugador no se registró cuando aún habían cupos disponibles,
           //así que se borra de la partida y se dirige a la página de inicio
           deleteGameOnPlayer({ variables: { player_id: currentPlayer } });
           window.location.reload();
@@ -202,6 +174,15 @@ export default function MyCard({
         }
       }
     }
+  }
+
+  if (isFirstTime) {
+    //si es la primera vez que entra a la partida actual,
+    //registra el id del jugador con el id de la partida actual
+    setIsFirstTime(false);
+    insertGamePlayer({
+      variables: { game_id: game, player_id: currentPlayer }
+    });
   }
 
   if (!loading) {
@@ -218,22 +199,16 @@ export default function MyCard({
     //cuando el oponente da stop, envía los datos a la base de datos
     setLoadData(false);
     setListening(false);
-    let viewValues = Object.entries(inputs);
 
     insertGame({
-      variables: {
-        animal: viewValues[4][1],
-        apellido: viewValues[1][1],
-        ciudad: viewValues[2][1],
-        color: viewValues[6][1],
-        cosa: viewValues[7][1],
-        fruta: viewValues[5][1],
-        nombre: viewValues[0][1],
-        pais: viewValues[3][1],
-        player_id: viewValues[9][1],
-        game_id: viewValues[8][1]
-      }
+      variables: inputs
     });
+  }
+
+  function disableButton() {
+    // Deshabilita el botón de stop para que no se oprima varias veces y haga muchos insert
+    setDisabled(true);
+    setListening(false);
   }
 
   function onChange(e) {
@@ -249,8 +224,6 @@ export default function MyCard({
       x.className = x.className.replace("show", "");
     }, 3000);
   }
-
-  console.log("visible letter: ", visibleLetter);
 
   return (
     <React.Fragment>
