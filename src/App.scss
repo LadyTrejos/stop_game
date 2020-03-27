@@ -92,7 +92,7 @@ body {
     width: 99.5%;
   }
 
-  .footer {
+  .header {
     width: 90%;
     display: flex;
     justify-content: space-between;
@@ -104,6 +104,7 @@ body {
       color: $secondary-color;
       margin-bottom: 10px;
       letter-spacing: 1px;
+      margin-right: 20px;
     }
   }
 
@@ -118,6 +119,12 @@ body {
 
   @media screen and (max-width: 768px) {
     padding-bottom: 3.2rem;
+  }
+
+  span {
+    font-family: $font-handwritten;
+    color: $secondary-color;
+    font-size: 1.5rem;
   }
 
   .hole-top {
@@ -298,19 +305,22 @@ body {
     margin: 10% 0 5% 0;
   }
 
-  button {
-    background-color: rgba($color: $secondary-color, $alpha: 0.3);
-    border-radius: $border-radius;
-    font-size: 1.2rem;
-    font-family: $font-text;
-    border: none;
-    transition: all 0.4s ease-in-out;
+}
 
-    &:hover {
-      background-color: rgba($color: $secondary-color, $alpha: 0.5);
-      cursor: pointer;
-    }
+.purple-button {
+
+  background-color: rgba($color: $secondary-color, $alpha: 0.3);
+  border-radius: $border-radius;
+  font-size: 1.2rem;
+  font-family: $font-text;
+  border: none;
+  transition: all 0.4s ease-in-out;
+
+  &:hover {
+    background-color: rgba($color: $secondary-color, $alpha: 0.5);
+    cursor: pointer;
   }
+
 }
 
 .flip-card {
@@ -512,7 +522,7 @@ input {
     border: none;
     margin: 0 20px;
 
-    &:hover {
+    &:hover:enabled {
       cursor: pointer;
     }
 
@@ -571,7 +581,7 @@ input {
 }
 
 .menu__link__active svg,
-.menu__link:hover svg {
+.menu__link:hover:enabled svg {
   stroke-dashoffset: 0;
   opacity: 1;
   transition: opacity 0s, stroke-dashoffset 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);

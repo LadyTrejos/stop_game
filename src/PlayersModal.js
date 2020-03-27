@@ -80,6 +80,7 @@ const PlayersModal = props => {
             placeholder="Nombre de usuario"
           ></input>
           <button
+            className="purple-button"
             onClick={e => createPlayer(e, playerName)}
             disabled={disabled}
           >

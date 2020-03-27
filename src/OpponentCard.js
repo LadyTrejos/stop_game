@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSubscription } from "@apollo/react-hooks";
 import gql from "graphql-tag";
+import ScoreSelector from "./ScoreSelector";
 
 const GET_POST = gql`
   subscription GetStop($game_id: Int!, $player_id: Int!) {
@@ -15,6 +16,20 @@ const GET_POST = gql`
       fruta
       nombre
       pais
+      id
+      player {
+        nombre
+      }
+      stop_scores {
+        animal
+        apellido
+        ciudad
+        color
+        cosa
+        fruta
+        nombre
+        pais
+      }
     }
   }
 `;
@@ -51,46 +66,122 @@ export default function OpponentCard({ currentPlayer, game }) {
     }
   });
 
+  function total(scores) {
+    let total = 0;
+
+    for (const key in scores) {
+      if (typeof scores[key] === "number") {
+        total += scores[key];
+      }
+    }
+    return `Total: ${total}`;
+  }
+
   function renderData() {
     const listData = allData.map((newData, idx) => (
       <div className="card" key={idx}>
+        <div className="header">
+          <span></span>
+          <span>{newData["player"]["nombre"]}</span>
+        </div>
         <div className="table">
           <div className="col">
             <label>Nombre</label>
             <input type="text" value={newData["nombre"]} disabled></input>
+            {newData["stop_scores"].length > 0 ? (
+              <ScoreSelector
+                fieldName="nombre"
+                readOnly={true}
+                selectedItem={newData["stop_scores"][0]["nombre"]}
+              />
+            ) : null}
           </div>
           <div className="col">
             <label>Apellido</label>
             <input type="text" value={newData["apellido"]} disabled></input>
+            {newData["stop_scores"].length > 0 ? (
+              <ScoreSelector
+                fieldName="apellido"
+                readOnly={true}
+                selectedItem={newData["stop_scores"][0]["apellido"]}
+              />
+            ) : null}
           </div>
           <div className="col">
             <label>Ciudad</label>
             <input type="text" value={newData["ciudad"]} disabled></input>
+            {newData["stop_scores"].length > 0 ? (
+              <ScoreSelector
+                fieldName="ciudad"
+                readOnly={true}
+                selectedItem={newData["stop_scores"][0]["ciudad"]}
+              />
+            ) : null}
           </div>
           <div className="col">
             <label>País</label>
             <input type="text" value={newData["pais"]} disabled></input>
+            {newData["stop_scores"].length > 0 ? (
+              <ScoreSelector
+                fieldName="pais"
+                readOnly={true}
+                selectedItem={newData["stop_scores"][0]["pais"]}
+              />
+            ) : null}
           </div>
           <div className="col">
             <label>Animal</label>
             <input type="text" value={newData["animal"]} disabled></input>
+            {newData["stop_scores"].length > 0 ? (
+              <ScoreSelector
+                fieldName="animal"
+                readOnly={true}
+                selectedItem={newData["stop_scores"][0]["animal"]}
+              />
+            ) : null}
           </div>
           <div className="col">
             <label>Fruta</label>
             <input type="text" value={newData["fruta"]} disabled></input>
+            {newData["stop_scores"].length > 0 ? (
+              <ScoreSelector
+                fieldName="fruta"
+                readOnly={true}
+                selectedItem={newData["stop_scores"][0]["fruta"]}
+              />
+            ) : null}
           </div>
           <div className="col">
             <label>Color</label>
             <input type="text" value={newData["color"]} disabled></input>
+            {newData["stop_scores"].length > 0 ? (
+              <ScoreSelector
+                fieldName="color"
+                readOnly={true}
+                selectedItem={newData["stop_scores"][0]["color"]}
+              />
+            ) : null}
           </div>
           <div className="col">
             <label>Cosa</label>
             <input type="text" value={newData["cosa"]} disabled></input>
+            {newData["stop_scores"].length > 0 ? (
+              <ScoreSelector
+                fieldName="cosa"
+                readOnly={true}
+                selectedItem={newData["stop_scores"][0]["cosa"]}
+              />
+            ) : null}
           </div>
           <div className="hole hole-top"></div>
           <div className="hole hole-middle"></div>
           <div className="hole hole-bottom"></div>
         </div>
+        <span>
+          {newData["stop_scores"].length > 0
+            ? total(newData["stop_scores"][0])
+            : null}
+        </span>
       </div>
     ));
 

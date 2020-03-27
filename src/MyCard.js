@@ -100,6 +100,7 @@ export default function MyCard({
   const [isTheEnd, setIsTheEnd] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [visibleLetter, setVisibleLetter] = useState(false);
+  const [visibleTotal, setVisibleTotal] = useState(false);
   const [showLetter, setShowLetter] = useState(true);
 
   const [insertGame] = useMutation(INSERT_STOP);
@@ -108,18 +109,40 @@ export default function MyCard({
   const { loading, data = {} } = useSubscription(GET_POST, {
     variables: { game_id: game, player_id: currentPlayer }
   });
-  const { inputs, handleInputChange, handleSubmit } = useStopForm({
-    nombre: "",
-    apellido: "",
-    ciudad: "",
-    pais: "",
-    animal: "",
-    fruta: "",
-    color: "",
-    cosa: "",
-    game_id: game,
-    player_id: currentPlayer
-  });
+  const {
+    getStopId,
+    inputs,
+    scoreInputs,
+    handleInputChange,
+    handleInputScoreChange,
+    handleSubmit,
+    handleSubmitScore
+  } = useStopForm(
+    {
+      nombre: "",
+      apellido: "",
+      ciudad: "",
+      pais: "",
+      animal: "",
+      fruta: "",
+      color: "",
+      cosa: "",
+      game_id: game,
+      player_id: currentPlayer
+    },
+    {
+      nombre: null,
+      apellido: null,
+      ciudad: null,
+      pais: null,
+      animal: null,
+      fruta: null,
+      color: null,
+      cosa: null,
+      stop_id: null
+    },
+    () => {}
+  );
 
   const getGamePlayer = useSubscription(GET_GAME_PLAYER, {
     variables: { game_id: game },
@@ -128,11 +151,6 @@ export default function MyCard({
   });
 
   function checkNumOfPlayers(playersList) {
-    console.log(
-      "check num of players: ",
-      playersList.data.games_players.length,
-      numberOfPlayers
-    );
     if (playersList.data.games_players.length < numberOfPlayers) {
       if (!disabled && !disabledInput) {
         setDisabled(true);
@@ -146,7 +164,6 @@ export default function MyCard({
           .slice(0, numberOfPlayers)
           .map(player => player.player_id);
         if (allowedPlayersArray.includes(currentPlayer)) {
-          console.log("Todos los jugadores están listos.");
           if (!visibleLetter && showLetter) {
             setVisibleLetter(true);
             setShowLetter(false);
@@ -203,6 +220,8 @@ export default function MyCard({
 
     insertGame({
       variables: inputs
+    }).then(res => {
+      getStopId(res.data.insert_stop.returning[0].id);
     });
   }
 
@@ -218,11 +237,25 @@ export default function MyCard({
 
   function showLetterPopUp() {
     var x = document.getElementById("snackbar");
-    console.log("x -->", x);
     x.className = "show";
     setTimeout(function() {
       x.className = x.className.replace("show", "");
     }, 3000);
+  }
+
+  function showTotal() {
+    setVisibleTotal(true);
+  }
+
+  function total(scores) {
+    let total = 0;
+
+    for (const key in scores) {
+      if (typeof scores[key] === "number" && key !== "stop_id") {
+        total += scores[key];
+      }
+    }
+    return `Total: ${total}`;
   }
 
   return (
@@ -234,11 +267,9 @@ export default function MyCard({
         <div id="snackbar">{`Letra: ${gameLetter}`}</div>
 
         <div className="card">
-          <div className="footer">
-            <span style={{ float: "left" }}>
-              {visibleLetter ? `Letra: ${gameLetter}` : " "}
-            </span>
-            <span style={{ float: "right" }}>{`${currentPlayerName}`}</span>
+          <div className="header">
+            <span>{visibleLetter ? `Letra: ${gameLetter}` : " "}</span>
+            <span>{`${currentPlayerName}`}</span>
           </div>
 
           <div className="table">
@@ -251,7 +282,12 @@ export default function MyCard({
                 value={inputs.nombre}
                 disabled={disabledInput}
               />
-              {isTheEnd ? <ScoreSelector fieldName="nombre" /> : null}
+              {isTheEnd ? (
+                <ScoreSelector
+                  onChange={handleInputScoreChange}
+                  fieldName="nombre"
+                />
+              ) : null}
             </div>
             <div>
               <label>Apellido</label>
@@ -262,7 +298,12 @@ export default function MyCard({
                 value={inputs.apellido}
                 disabled={disabledInput}
               />
-              {isTheEnd ? <ScoreSelector fieldName="apellido" /> : null}
+              {isTheEnd ? (
+                <ScoreSelector
+                  onChange={handleInputScoreChange}
+                  fieldName="apellido"
+                />
+              ) : null}
             </div>
             <div>
               <label>Ciudad</label>
@@ -273,7 +314,12 @@ export default function MyCard({
                 value={inputs.ciudad}
                 disabled={disabledInput}
               />
-              {isTheEnd ? <ScoreSelector fieldName="ciudad" /> : null}
+              {isTheEnd ? (
+                <ScoreSelector
+                  onChange={handleInputScoreChange}
+                  fieldName="ciudad"
+                />
+              ) : null}
             </div>
             <div>
               <label>País</label>
@@ -284,7 +330,12 @@ export default function MyCard({
                 value={inputs.pais}
                 disabled={disabledInput}
               />
-              {isTheEnd ? <ScoreSelector fieldName="pais" /> : null}
+              {isTheEnd ? (
+                <ScoreSelector
+                  onChange={handleInputScoreChange}
+                  fieldName="pais"
+                />
+              ) : null}
             </div>
             <div>
               <label>Animal</label>
@@ -295,7 +346,12 @@ export default function MyCard({
                 value={inputs.animal}
                 disabled={disabledInput}
               />
-              {isTheEnd ? <ScoreSelector fieldName="animal" /> : null}
+              {isTheEnd ? (
+                <ScoreSelector
+                  onChange={handleInputScoreChange}
+                  fieldName="animal"
+                />
+              ) : null}
             </div>
             <div>
               <label>Fruta</label>
@@ -306,7 +362,12 @@ export default function MyCard({
                 value={inputs.fruta}
                 disabled={disabledInput}
               />
-              {isTheEnd ? <ScoreSelector fieldName="fruta" /> : null}
+              {isTheEnd ? (
+                <ScoreSelector
+                  onChange={handleInputScoreChange}
+                  fieldName="fruta"
+                />
+              ) : null}
             </div>
             <div>
               <label>Color</label>
@@ -317,7 +378,12 @@ export default function MyCard({
                 value={inputs.color}
                 disabled={disabledInput}
               />
-              {isTheEnd ? <ScoreSelector fieldName="color" /> : null}
+              {isTheEnd ? (
+                <ScoreSelector
+                  onChange={handleInputScoreChange}
+                  fieldName="color"
+                />
+              ) : null}
             </div>
             <div>
               <label>Cosa</label>
@@ -328,12 +394,27 @@ export default function MyCard({
                 value={inputs.cosa}
                 disabled={disabledInput}
               />
-              {isTheEnd ? <ScoreSelector fieldName="cosa" /> : null}
+              {isTheEnd ? (
+                <ScoreSelector
+                  onChange={handleInputScoreChange}
+                  fieldName="cosa"
+                />
+              ) : null}
             </div>
           </div>
           <div className="hole hole-top"></div>
           {/* <div className="hole hole-middle"></div> */}
           <div className="hole hole-bottom"></div>
+          {isTheEnd && !visibleTotal ? (
+            <button
+              type="button"
+              className="purple-button"
+              onClick={e => handleSubmitScore(e, scoreInputs, showTotal)}
+            >
+              Publicar mi resultado
+            </button>
+          ) : null}
+          {isTheEnd && visibleTotal ? <span>{total(scoreInputs)}</span> : null}
         </div>
         <button
           type="submit"

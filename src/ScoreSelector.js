@@ -2,12 +2,17 @@ import React, { useState } from "react";
 
 const SCORES = [0, 50, 100];
 
-function ScoreSelector({ fieldName, handleInputScoreChange }) {
-  const [score, setScore] = useState(0);
+function ScoreSelector({
+  fieldName,
+  onChange = () => {},
+  selectedItem = null,
+  readOnly = false
+}) {
+  const [score, setScore] = useState(selectedItem);
 
-  function onClick(e, item) {
-    setScore(item);
-    handleInputScoreChange(e);
+  function onClick(value) {
+    setScore(value);
+    onChange(fieldName, value);
   }
 
   return (
@@ -18,10 +23,11 @@ function ScoreSelector({ fieldName, handleInputScoreChange }) {
           type="button"
           name={fieldName}
           value={scoreItem}
+          disabled={readOnly}
           className={`menu__link${
             score === scoreItem ? " menu__link__active" : ""
           }`}
-          onClick={e => onClick(e, scoreItem)}
+          onClick={() => onClick(scoreItem)}
         >
           {scoreItem}
           <svg
