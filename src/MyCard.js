@@ -284,6 +284,7 @@ export default function MyCard({
               />
               {isTheEnd ? (
                 <ScoreSelector
+                  readOnly={visibleTotal}
                   onChange={handleInputScoreChange}
                   fieldName="nombre"
                 />
@@ -300,6 +301,7 @@ export default function MyCard({
               />
               {isTheEnd ? (
                 <ScoreSelector
+                  readOnly={visibleTotal}
                   onChange={handleInputScoreChange}
                   fieldName="apellido"
                 />
@@ -316,6 +318,7 @@ export default function MyCard({
               />
               {isTheEnd ? (
                 <ScoreSelector
+                  readOnly={visibleTotal}
                   onChange={handleInputScoreChange}
                   fieldName="ciudad"
                 />
@@ -332,6 +335,7 @@ export default function MyCard({
               />
               {isTheEnd ? (
                 <ScoreSelector
+                  readOnly={visibleTotal}
                   onChange={handleInputScoreChange}
                   fieldName="pais"
                 />
@@ -348,6 +352,7 @@ export default function MyCard({
               />
               {isTheEnd ? (
                 <ScoreSelector
+                  readOnly={visibleTotal}
                   onChange={handleInputScoreChange}
                   fieldName="animal"
                 />
@@ -364,6 +369,7 @@ export default function MyCard({
               />
               {isTheEnd ? (
                 <ScoreSelector
+                  readOnly={visibleTotal}
                   onChange={handleInputScoreChange}
                   fieldName="fruta"
                 />
@@ -380,6 +386,7 @@ export default function MyCard({
               />
               {isTheEnd ? (
                 <ScoreSelector
+                  readOnly={visibleTotal}
                   onChange={handleInputScoreChange}
                   fieldName="color"
                 />
@@ -396,6 +403,7 @@ export default function MyCard({
               />
               {isTheEnd ? (
                 <ScoreSelector
+                  readOnly={visibleTotal}
                   onChange={handleInputScoreChange}
                   fieldName="cosa"
                 />
