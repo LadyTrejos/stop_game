@@ -19,13 +19,35 @@ const GET_POST = gql`
   }
 `;
 
+const GET_PLAYERS_NAMES = gql`
+  subscription GetPlayersNames($game_id: Int!) {
+    games_players(where: { game_id: { _eq: $game_id } }) {
+      player {
+        nombre
+        id
+      }
+    }
+  }
+`;
+
 export default function OpponentCard({ currentPlayer, game }) {
   const [allData, setAllData] = useState([]);
+  const [players, setPlayers] = useState([]);
 
   const { loading, error, data } = useSubscription(GET_POST, {
     variables: { game_id: game, player_id: currentPlayer },
     onSubscriptionData: ({ subscriptionData }) => {
       setAllData(subscriptionData.data.stop);
+    }
+  });
+
+  const getPlayersNames = useSubscription(GET_PLAYERS_NAMES, {
+    variables: { game_id: game },
+    onSubscriptionData: ({ subscriptionData }) => {
+      const playersArray = subscriptionData.data.games_players
+        .filter(item => item["player"]["id"] !== currentPlayer)
+        .map(item => item["player"]["nombre"]);
+      setPlayers(playersArray);
     }
   });
 
@@ -81,7 +103,15 @@ export default function OpponentCard({ currentPlayer, game }) {
         <div className="flip-card-inner">
           <div className="flip-card-front">
             <div className="card">
-              Jugando...<div className="hole hole-top-right"></div>
+              <div className="players-list">
+                <h2>Jugando...</h2>
+                <ol>
+                  {players.map(player => (
+                    <li>{player}</li>
+                  ))}
+                </ol>
+              </div>
+              <div className="hole hole-top-right"></div>
               <div className="hole hole-middle-right"></div>
               <div className="hole hole-bottom-right"></div>
             </div>

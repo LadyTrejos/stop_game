@@ -77,7 +77,7 @@ body {
   padding: 2rem 2rem 1.2rem;
   position: relative;
   min-height: 200px;
-  width: 70%;
+  width: 75%;
   @include gridBackground();
 
   &:before,
@@ -102,7 +102,7 @@ body {
       font-family: $font-text;
       font-size: 1.2rem;
       color: $secondary-color;
-      margin-top: 10px;
+      margin-bottom: 10px;
       letter-spacing: 1px;
     }
   }
@@ -154,9 +154,10 @@ body {
 .table {
   display: grid;
   grid-template-columns: auto auto auto auto;
-  gap: 10px;
+  column-gap: 20px;
+  row-gap: 10px;
   width: 92%;
-  margin-left: 8%;
+  margin-left: 30px;
 
   @media screen and (max-width: 500px) {
     grid-template-columns: auto;
@@ -179,6 +180,7 @@ body {
 
 
 .stop-button {
+  min-width: 180px;
   width: 20%;
   transform: rotate(-2deg);
   font-family: $font-title;
@@ -193,7 +195,6 @@ body {
   &:hover:enabled,
   &:focus:enabled,
   &:active {
-    animation: pulse 1s;
     box-shadow: 0 0 0 10em rgba(#fff, 0);
     border-color: coral;
     color: white;
@@ -215,9 +216,11 @@ body {
   }
 
   &.end {
-    background-color: coral;
+    animation: pulse 1s;
+    box-shadow: 0 0 0 10em rgba(#fff, 0);
     border-color: coral;
     color: white;
+    background-color: coral;
 
     &:disabled {
       color: white;
@@ -463,4 +466,113 @@ input {
     top: 0;
     opacity: 0;
   }
+}
+
+.players-list {
+  h2 {
+    font-family: $font-text;
+    color: $pen-color;
+  }
+
+  ol {
+    width: 80%;
+    margin: 0 auto;
+    overflow: auto;
+    text-align: left;
+  }
+
+  ol li {
+    float: left;
+    width: 33%;
+    font-family: $font-handwritten;
+    color: $secondary-color;
+    font-size: 22px;
+  }
+
+  @media screen and (max-width: 600px) {
+    ol li {
+      width: 100%;
+    }
+  }
+
+  @media screen and (min-width: 600px) and (max-width: 940px) {
+    ol {
+      width: 90%;
+    }
+
+    ol li {
+      width: 50%;
+    }
+  }
+}
+
+.menu {
+  button {
+    background-color: transparent;
+    border: none;
+    margin: 0 20px;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+
+.menu {
+  width: 90%;
+  justify-content: space-between;
+  display: inline-flex;
+  text-align: center;
+
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
+
+
+}
+
+.menu__link {
+  display: inline-block;
+  color: darken($color: $gray, $amount: 30);
+  text-decoration: none;
+  position: relative;
+  padding: 14px 0;
+  font-family: $font-handwritten;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: 0.040em;
+}
+
+.menu__link svg {
+  fill: none;
+  stroke: darken($gray, 40);
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke-dasharray: 338;
+  stroke-dashoffset: 338;
+  stroke-linecap: round;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: calc(100% + 45px);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: stroke-dashoffset 0s 0.2s, opacity 0.2s;
+}
+
+.menu__link__active svg {
+  stroke: #ff4c4c;
+}
+
+.menu__link__active svg,
+.menu__link:hover svg {
+  stroke-dashoffset: 0;
+  opacity: 1;
+  transition: opacity 0s, stroke-dashoffset 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }

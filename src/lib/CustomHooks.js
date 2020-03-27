@@ -45,7 +45,6 @@ const useStopForm = (initialValues, callback = () => {}) => {
 
     let empty = false;
     let viewValues = Object.entries(values);
-    let message = null;
 
     viewValues.map(item => {
       if (typeof item[1] !== "number") {
@@ -56,7 +55,7 @@ const useStopForm = (initialValues, callback = () => {}) => {
     });
 
     if (empty) {
-      message = "faltan por llenar algunos campos";
+      alert("Debes llenar todos los campos.");
     } else {
       disableButton();
       insertGame({
@@ -75,7 +74,7 @@ const useStopForm = (initialValues, callback = () => {}) => {
       });
     }
 
-    callback({ err: message });
+    callback();
   };
 
   const handleInputChange = event => {

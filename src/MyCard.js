@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSubscription, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import useStopForm from "./lib/CustomHooks";
+import ScoreSelector from "./ScoreSelector";
 
 const GET_POST = gql`
   subscription GetStop($game_id: Int!, $player_id: Int!) {
@@ -91,7 +92,6 @@ export default function MyCard({
   gameLetter,
   numberOfPlayers
 }) {
-  const [formError, setFormError] = useState(null);
   const [disabled, setDisabled] = useState(true);
   const [disabledInput, setDisabledInput] = useState(true);
   const [loadData, setLoadData] = useState(false);
@@ -108,21 +108,18 @@ export default function MyCard({
   const { loading, data = {} } = useSubscription(GET_POST, {
     variables: { game_id: game, player_id: currentPlayer }
   });
-  const { inputs, handleInputChange, handleSubmit } = useStopForm(
-    {
-      nombre: "",
-      apellido: "",
-      ciudad: "",
-      pais: "",
-      animal: "",
-      fruta: "",
-      color: "",
-      cosa: "",
-      game_id: game,
-      player_id: currentPlayer
-    },
-    ({ err }) => setFormError(err)
-  );
+  const { inputs, handleInputChange, handleSubmit } = useStopForm({
+    nombre: "",
+    apellido: "",
+    ciudad: "",
+    pais: "",
+    animal: "",
+    fruta: "",
+    color: "",
+    cosa: "",
+    game_id: game,
+    player_id: currentPlayer
+  });
 
   const getGamePlayer = useSubscription(GET_GAME_PLAYER, {
     variables: { game_id: game },
@@ -217,7 +214,6 @@ export default function MyCard({
 
   function onChange(e) {
     handleInputChange(e);
-    setFormError(null);
   }
 
   function showLetterPopUp() {
@@ -238,7 +234,13 @@ export default function MyCard({
         <div id="snackbar">{`Letra: ${gameLetter}`}</div>
 
         <div className="card">
-          <div>{formError}</div>
+          <div className="footer">
+            <span style={{ float: "left" }}>
+              {visibleLetter ? `Letra: ${gameLetter}` : " "}
+            </span>
+            <span style={{ float: "right" }}>{`${currentPlayerName}`}</span>
+          </div>
+
           <div className="table">
             <div>
               <label>Nombre</label>
@@ -249,6 +251,7 @@ export default function MyCard({
                 value={inputs.nombre}
                 disabled={disabledInput}
               />
+              {isTheEnd ? <ScoreSelector fieldName="nombre" /> : null}
             </div>
             <div>
               <label>Apellido</label>
@@ -259,6 +262,7 @@ export default function MyCard({
                 value={inputs.apellido}
                 disabled={disabledInput}
               />
+              {isTheEnd ? <ScoreSelector fieldName="apellido" /> : null}
             </div>
             <div>
               <label>Ciudad</label>
@@ -269,6 +273,7 @@ export default function MyCard({
                 value={inputs.ciudad}
                 disabled={disabledInput}
               />
+              {isTheEnd ? <ScoreSelector fieldName="ciudad" /> : null}
             </div>
             <div>
               <label>País</label>
@@ -279,6 +284,7 @@ export default function MyCard({
                 value={inputs.pais}
                 disabled={disabledInput}
               />
+              {isTheEnd ? <ScoreSelector fieldName="pais" /> : null}
             </div>
             <div>
               <label>Animal</label>
@@ -289,6 +295,7 @@ export default function MyCard({
                 value={inputs.animal}
                 disabled={disabledInput}
               />
+              {isTheEnd ? <ScoreSelector fieldName="animal" /> : null}
             </div>
             <div>
               <label>Fruta</label>
@@ -299,6 +306,7 @@ export default function MyCard({
                 value={inputs.fruta}
                 disabled={disabledInput}
               />
+              {isTheEnd ? <ScoreSelector fieldName="fruta" /> : null}
             </div>
             <div>
               <label>Color</label>
@@ -309,6 +317,7 @@ export default function MyCard({
                 value={inputs.color}
                 disabled={disabledInput}
               />
+              {isTheEnd ? <ScoreSelector fieldName="color" /> : null}
             </div>
             <div>
               <label>Cosa</label>
@@ -319,17 +328,12 @@ export default function MyCard({
                 value={inputs.cosa}
                 disabled={disabledInput}
               />
+              {isTheEnd ? <ScoreSelector fieldName="cosa" /> : null}
             </div>
           </div>
           <div className="hole hole-top"></div>
           {/* <div className="hole hole-middle"></div> */}
           <div className="hole hole-bottom"></div>
-          <div className="footer">
-            <span style={{ float: "left" }}>
-              {visibleLetter ? `Letra: ${gameLetter}` : " "}
-            </span>
-            <span style={{ float: "right" }}>{`${currentPlayerName}`}</span>
-          </div>
         </div>
         <button
           type="submit"
