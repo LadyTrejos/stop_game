@@ -5,6 +5,7 @@ import MyCard from "./MyCard";
 import OpponentCard from "./OpponentCard";
 import PlayersModal from "./PlayersModal";
 import "./App.scss";
+import Footer from "./Footer";
 
 const INSERT_GAME = gql`
   mutation InsertGame($letter: String!, $number_of_players: Int!) {
@@ -171,6 +172,7 @@ function App() {
           <button onClick={() => newGame()} className="new-game">
             Nueva partida
           </button>
+          <Footer />
         </React.Fragment>
       )}
     </div>

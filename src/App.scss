@@ -47,10 +47,19 @@ body {
   align-items: center;
 }
 
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 2.5rem;
+  margin-bottom: 20px;
+  font-family: $font-handwritten;
+}
+
 .stop-title {
   font-family: $font-title;
   font-size: 10rem;
-  padding: 7% 0;
+  padding: 5% 0 3% 0;
   color: white;
   @include text-shadow();
 
