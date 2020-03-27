@@ -91,7 +91,6 @@ export default function MyCard({
   gameLetter,
   numberOfPlayers
 }) {
-  const [formError, setFormError] = useState(null);
   const [disabled, setDisabled] = useState(true);
   const [disabledInput, setDisabledInput] = useState(true);
   const [loadData, setLoadData] = useState(false);
@@ -108,7 +107,15 @@ export default function MyCard({
   const { loading, data = {} } = useSubscription(GET_POST, {
     variables: { game_id: game, player_id: currentPlayer }
   });
-  const { inputs, handleInputChange, handleSubmit } = useStopForm(
+  const {
+    getStopId,
+    inputs,
+    scoreInputs,
+    handleInputChange,
+    handleInputScoreChange,
+    handleSubmit,
+    handleSubmitScore
+  } = useStopForm(
     {
       nombre: "",
       apellido: "",
@@ -121,7 +128,18 @@ export default function MyCard({
       game_id: game,
       player_id: currentPlayer
     },
-    ({ err }) => setFormError(err)
+    {
+      nombre: null,
+      apellido: null,
+      ciudad: null,
+      pais: null,
+      animal: null,
+      fruta: null,
+      color: null,
+      cosa: null,
+      stop_id: null
+    },
+    () => {}
   );
 
   const getGamePlayer = useSubscription(GET_GAME_PLAYER, {
@@ -131,11 +149,6 @@ export default function MyCard({
   });
 
   function checkNumOfPlayers(playersList) {
-    console.log(
-      "check num of players: ",
-      playersList.data.games_players.length,
-      numberOfPlayers
-    );
     if (playersList.data.games_players.length < numberOfPlayers) {
       if (!disabled && !disabledInput) {
         setDisabled(true);
@@ -149,7 +162,6 @@ export default function MyCard({
           .slice(0, numberOfPlayers)
           .map(player => player.player_id);
         if (allowedPlayersArray.includes(currentPlayer)) {
-          console.log("Todos los jugadores están listos.");
           if (!visibleLetter && showLetter) {
             setVisibleLetter(true);
             setShowLetter(false);
@@ -206,6 +218,8 @@ export default function MyCard({
 
     insertGame({
       variables: inputs
+    }).then(res => {
+      getStopId(res.data.insert_stop.returning[0].id);
     });
   }
 
@@ -217,12 +231,14 @@ export default function MyCard({
 
   function onChange(e) {
     handleInputChange(e);
-    setFormError(null);
+  }
+
+  function onPress(e) {
+    handleInputScoreChange(e);
   }
 
   function showLetterPopUp() {
     var x = document.getElementById("snackbar");
-    console.log("x -->", x);
     x.className = "show";
     setTimeout(function() {
       x.className = x.className.replace("show", "");
@@ -238,7 +254,6 @@ export default function MyCard({
         <div id="snackbar">{`Letra: ${gameLetter}`}</div>
 
         <div className="card">
-          <div>{formError}</div>
           <div className="table">
             <div>
               <label>Nombre</label>
