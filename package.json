@@ -10,6 +10,7 @@
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
     "apollo-link-ws": "^1.0.19",
+    "express": "^4.17.1",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
     "node-sass": "^4.13.1",
@@ -19,14 +20,16 @@
     "subscriptions-transport-ws": "^0.9.16"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "webpack -p"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
+  "homepage": "https://mystopgame.herokuapp.com/",
   "browserslist": {
     "production": [
       ">0.2%",
