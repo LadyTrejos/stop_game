@@ -1,6 +1,16 @@
 import React from "react";
 
 function Footer() {
-  return <footer>Hecho con 💙 por Lady Trejos & Iván Lizarazo</footer>;
+  return (
+    <div className="footer-container">
+      <footer>
+        Hecho con{" "}
+        <span role="img" aria-label="Emoji corazón azul">
+          💙
+        </span>{" "}
+        por Lady Trejos & Iván Lizarazo
+      </footer>
+    </div>
+  );
 }
 export default Footer;

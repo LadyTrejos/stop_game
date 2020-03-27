@@ -132,7 +132,7 @@ function App() {
   }
 
   return (
-    <div>
+    <div className="wrapper">
       {active ? (
         <React.Fragment>
           {visibleModal ? (
@@ -158,20 +158,22 @@ function App() {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <div className="stop-title">Stop!</div>
-          <div className="start-game">
-            <label>Cantidad de jugadores: </label>
-            <input
-              type="number"
-              onChange={e => onChange(e)}
-              max={9}
-              min={2}
-            ></input>
-          </div>
+          <div>
+            <div className="stop-title">Stop!</div>
+            <div className="start-game">
+              <label>Cantidad de jugadores: </label>
+              <input
+                type="number"
+                onChange={e => onChange(e)}
+                max={9}
+                min={2}
+              ></input>
+            </div>
 
-          <button onClick={() => newGame()} className="new-game">
-            Nueva partida
-          </button>
+            <button onClick={() => newGame()} className="new-game">
+              Nueva partida
+            </button>
+          </div>
           <Footer />
         </React.Fragment>
       )}
