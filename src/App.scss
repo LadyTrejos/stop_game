@@ -241,6 +241,7 @@ body {
 .players-card {
   width: 40%;
   height: 50%;
+  max-height: 500px;
   position: absolute;
   top: 0;
   left: 0;
@@ -259,6 +260,10 @@ body {
     -0.5rem 0.5rem 1rem rgba(black, 0.2);
 
   @include gridBackground();
+
+  @media screen and (max-width: 768px) {
+    width: 70%;
+  }
 
   h1 {
     font-family: $font-text;
