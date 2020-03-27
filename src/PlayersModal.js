@@ -48,7 +48,9 @@ const PlayersModal = props => {
     if (playerName.trim() === "") {
       alert("El nombre de usuario no puede ser vacío.");
     } else {
-      const pattern = RegExp("^[a-zA-Z0-9]{1,}$");
+      const pattern = RegExp(
+        "^[a-zA-Z0-9äáàëéèíìïöóòúüùñÁÉÍÓÚÀÈÌÒÙÄËÏÖÜÑ]{1,}$"
+      );
       playerName = playerName.trim();
       if (pattern.test(playerName)) {
         insertPlayer({ variables: { nombre: playerName } }).then(res => {
