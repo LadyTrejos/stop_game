@@ -53,15 +53,12 @@ footer {
   font-family: $font-handwritten;
 }
 
-.footer-container {
-  padding: 3rem 0 1rem 0;
-}
 
 .wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 100vh;
+  min-height: 90vh;
 }
 
 .stop-title {
@@ -76,7 +73,7 @@ footer {
 
   @media screen and (max-width: 600px) {
     font-size: 7rem;
-    padding: 20% 0;
+    padding: 10% 0;
   }
 
   @keyframes bounceIn {
@@ -108,6 +105,7 @@ footer {
   width: 20%;
   min-width: 200px;
   align-self: center;
+  margin-top: 1.5rem;
   // border: 1px solid $secondary-color;
   border: none;
   box-shadow: -1px 1px 10px gray;
