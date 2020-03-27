@@ -174,7 +174,6 @@ export default function OpponentCard({ currentPlayer, game }) {
             ) : null}
           </div>
           <div className="hole hole-top"></div>
-          <div className="hole hole-middle"></div>
           <div className="hole hole-bottom"></div>
         </div>
         <span>
@@ -203,7 +202,6 @@ export default function OpponentCard({ currentPlayer, game }) {
                 </ol>
               </div>
               <div className="hole hole-top-right"></div>
-              <div className="hole hole-middle-right"></div>
               <div className="hole hole-bottom-right"></div>
             </div>
           </div>
